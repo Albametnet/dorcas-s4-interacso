@@ -21,7 +21,13 @@ class App extends Component {
       calendarLoaded: false,
       projectsdata: [],
       projectsCharts: [],
-      hoursCharts: []
+      hoursCharts: [],
+      weekChartData: [],
+      memberPics: [],
+      tasksWinner: {},
+      commitsWinner: {},
+      averageTask: 0,
+      averageCommits: 0
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -103,13 +109,20 @@ class App extends Component {
           updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
          />
         <Projects projectsdata= {this.state.projectsdata}
-          updateState={this.updateState}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
+          updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
         <ProjectDetail />
-        <Team apiService= {this.apiService}/>
+        <Team weekChartData={this.state.weekChartData}
+          memberPics={this.state.memberPics}
+          tasksWinner={this.state.tasksWinner}
+          commitsWinner={this.state.commitsWinner}
+          averageTask={this.state.averageTask}
+          averageCommits={this.state.averageCommits}
+          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+        />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}

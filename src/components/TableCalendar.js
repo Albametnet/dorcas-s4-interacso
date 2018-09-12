@@ -16,7 +16,7 @@ class TableCalendar extends React.Component {
   componentDidMount() {
     this.props.retrieveFromApi('calendar').then(apiResponse => {
       if (this.props.calendarLoaded === false) {
-        this.setDatesNotifications(apiResponse);
+        this.setDatesNotifications(apiResponse.data);
         this.props.updateState({calendarLoaded: true});
       }
     });

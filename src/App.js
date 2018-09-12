@@ -18,7 +18,10 @@ class App extends Component {
       currentSlideLeft: "0",
       totalDataboards: 5,
       datesToPrint: [],
-      calendarLoaded: false
+      calendarLoaded: false,
+      projectsdata: [],
+      projectsCharts: [],
+      hoursCharts: []
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -54,7 +57,7 @@ class App extends Component {
         }
       }
       ).then(json => {
-        return json.data;
+        return json;
       }).catch(error => {
         alert("El token es incorrecto");
         console.error(error);
@@ -99,7 +102,12 @@ class App extends Component {
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
          />
-        <Projects apiService= {this.apiService}/>
+        <Projects projectsdata= {this.state.projectsdata}
+          updateState={this.updateState}
+          projectsCharts={this.state.projectsCharts}
+          hoursCharts={this.state.hoursCharts}
+          retrieveFromApi={this.retrieveFromApi}
+        />
         <ProjectDetail />
         <Team apiService= {this.apiService}/>
         <Calendar datesToPrint={this.state.datesToPrint}

@@ -17,7 +17,8 @@ class App extends Component {
       currentTransition: "0.5s",
       currentSlideLeft: "0",
       totalDataboards: 5,
-      datesToPrint: []
+      datesToPrint: [],
+      calendarLoaded: false
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -32,7 +33,7 @@ class App extends Component {
     this.setState(object);
   }
 
-  retrieveFromApi(endpoint, callback) {
+  retrieveFromApi(endpoint) {
     if(typeof Env !== "undefined" & Env.token !== "undefined") {
       return fetch(
         this.apiService + endpoint,
@@ -95,12 +96,17 @@ class App extends Component {
     return (
       <div className= "visor" style={sliderStyles}>
         <Calendar datesToPrint={this.state.datesToPrint}
-           updateState={this.updateState}
-           retrieveFromApi={this.retrieveFromApi}
+          calendarLoaded={this.state.calendarLoaded}
+          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
          />
         <Projects apiService= {this.apiService}/>
         <ProjectDetail />
         <Team apiService= {this.apiService}/>
+        <Calendar datesToPrint={this.state.datesToPrint}
+          calendarLoaded={this.state.calendarLoaded}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+         />
       </div>
     );
   }

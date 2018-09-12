@@ -4,16 +4,22 @@ class TableCalendar extends React.Component {
   constructor(props){
     super(props);
     this.milisecondsInADay= 86400000;
-    if (typeof this.props.datesToPrint !== 'undefined') {
+    if (
+      typeof this.props.datesToPrint !== 'undefined' &&
+      this.props.datesToPrint.length === 0
+    ) {
       this.getCalendarDates(this.props.datesToPrint);
     }
     this.setDatesNotifications = this.setDatesNotifications.bind(this);
   }
 
   componentDidMount() {
-    this.props.retrieveFromApi('calendar').then(
-      this.setDatesNotifications
-    );
+    this.props.retrieveFromApi('calendar').then(apiResponse => {
+      if (this.props.calendarLoaded === false) {
+        this.setDatesNotifications(apiResponse);
+        this.props.updateState({calendarLoaded: true});
+      }
+    });
   }
 
   makeCalendarStructure() {

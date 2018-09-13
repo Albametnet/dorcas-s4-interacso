@@ -1,10 +1,10 @@
-.dashborad {
+.dashboard {
   background-color: grey;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 }
-.main__container-team {
+.main__container--team {
   height: auto;
   display: grid;
   grid-template-columns: 0.28fr 0.28fr 0.22fr 0.22fr;
@@ -18,9 +18,9 @@
   background-color: rgba(23, 81, 127, 0.6);
   padding: 40px 25px 30px 25px;
 }
-.tasks-title {
+.tasks__title {
   color: $titles;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   font-size: $large;
   font-weight: $bold;
   margin:0;
@@ -31,9 +31,9 @@
   background-color: rgba(23, 81, 127, 0.6);
   padding: 40px 25px 30px 25px;
 }
-.commits-title{
+.commits__title{
   color: $titles;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   font-size: $large;
   font-weight: $bold;
   margin:0;
@@ -42,84 +42,84 @@
   grid-column: 3 / 5;
   grid-row: 1 / 3;
 }
-.average__container-commits {
+.average__container--commits {
   background-color: $averageContainerCommits;
   color: $titles;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   padding: 20px 50px 24px 50px;
 }
-.commits-number{
+.commits__number{
   font-weight: $semibold;
   font-size: $xxx_large;
   margin: 0;
 }
-.commits-text{
+.commits__text{
   font-weight: $medium;
   font-size: $normal;
   margin: 0;
 }
-.average__container-tasks {
+.average__container--tasks {
   background-color: $averageContainerTasks;
   color: $titles;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   font-size: $large;
   font-weight: $bold;
   padding: 20px 50px 24px 50px;
   margin-top: 28px;
 }
-.tasks-number{
+.tasks__number{
   font-weight: $semibold;
   font-size: $xxx_large;
   margin: 0;
 }
-.tasks-text {
+.tasks__text {
   font-weight: $medium;
   font-size: $normal;
   margin: 0;
 }
-.people__container-asana {
+.people__container--asana {
   grid-column: 3;
   grid-row: 6/ 13;
   background-color: $peopleContainer;
   color: $titles;
   text-align: center;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   padding: 30px 0 30px 0;
 }
-.asana-title{
+.asana__title{
   font-size: $large;
   font-weight: $bold;
   margin:0;
 }
-.people__container-git {
+.people__container--git {
   grid-column: 4;
   grid-row: 6 / 13;
   background-color: $peopleContainer;
   color: $titles;
   text-align: center;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   padding: 30px 0 30px 0;
 }
-.git-title{
+.git__title{
   font-size: $large;
   font-weight: $bold;
   margin:0;
 }
-.killer-name {
+.killer__name {
 font-size: $normal;
 font-weight: $bold;
 }
-.killer-record{
+.killer__record{
   font-size: $x_large;
   font-weight: $semibold;
 }
-.killer-detail{
+.killer__detail{
   max-width: 250px;
   font-size: $normal;
   font-weight: $regular;
   margin: 0 auto;
 }
-.profile-pic{
+.profile__pic{
   width: 119px;
   height: 119px;
   background-image: url('./images/test-pic.jpg');
@@ -129,24 +129,22 @@ font-weight: $bold;
   border-radius: 50%;
   margin-top: 38px;
 }
-.commits-pic {
+.commits__pic {
   width: 832px;
   height: 397px;
-  background-image: url('./images/commits.jpg');
   background-size: cover;
   background-repeat: no-repeat;
   margin: 0 auto;
   margin-top: 18px;
 }
-.team_member_photo {
+.team-member__photo {
   border-top: 1px solid white;
   display: flex;
   justify-content: space-around;
-
-  img{
-  border-radius: 100px;
-  width: 40px;
-  height: 40px;
-  margin-top: 20px;
-  }
+}
+.team-member__photo--circles{
+border-radius: 100px;
+width: 40px;
+height: 40px;
+margin-top: 20px;
 }

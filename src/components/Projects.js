@@ -1,93 +1,70 @@
 import React from "react";
-import Header from './Header';
+import Header from "./Header";
 import ProjectListStatusBar from "./ProjectListStatusBar";
 import Notifications from "./Notifications";
-import Env from '../data/.env.json';
+import Env from "../data/.env.json";
 import MostCommitsChart from "./MostCommitsChart";
 import MostHoursChart from "./MostHoursChart";
 
-
 class Projects extends React.Component {
   constructor(props) {
-    super(props)
-    this.texts = {
+    super(props);
+    this.texts= {
       title: "Proyectos"
-    }
-    this.state = {
-      projectsCharts: [],
-      hoursCharts: []
-    }
-    this.getProjectsData = this.getProjectsData.bind(this);
+    };
   }
 
   componentDidMount() {
-    this.getProjectsData();
+    this.props.retrieveFromApi("projects").then(apiResponse => {
+      this.saveCommitsAndHours(apiResponse);
+    });
   }
 
-  getProjectsData() {
-    fetch(
-      this.props.apiService + 'projects',
-      {
-        method: 'get',
-        withCredentials: true,
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Authorization': Env.token,
-          'Content-Type': 'application/json'
-        }
-      }
-    ).then(response => {
-      console.log(response)
-      return response.json();
-    }
-  ).then(json => {
-    let projectsData = [];
-
-    for (var elemento in json.data[0].commitRank) {
+  saveCommitsAndHours(apiResponse) {
+    const projectsData= [];
+    for (var elemento in apiResponse.data[0].commitRank) {
       projectsData.push({
         projectName: elemento,
-        commits: json.data[0].commitRank[elemento]
+        commits: apiResponse.data[0].commitRank[elemento]
       });
     }
-    this.setState({
+    this.props.updateState({
       projectsCharts: projectsData
-    })
-    console.log(projectsData)
-
-    let hoursData = [];
-
-    for (var hoursProject in json.data[0].hourRank) {
+    });
+    const hoursData= [];
+    for (var hoursProject in apiResponse.data[0].hourRank) {
       hoursData.push({
         hoursName: hoursProject,
-        time: json.data[0].hourRank[hoursProject]
+        time: apiResponse.data[0].hourRank[hoursProject]
       });
     }
-    this.setState({
+    this.props.updateState({
       hoursCharts: hoursData
     });
-    console.log(hoursData)
-  });
-}
+  }
 
-render(){
-  return (
-    <div className="projects__container databoard">
-      <Header title={this.texts.title} />
-      <ProjectListStatusBar apiService={this.props.apiService} />
-      <div className="statistics__chart">
-        <div className="chart-commits">
-          <p>Proyectos más activos (commits)</p>
-          <MostCommitsChart data={this.state.projectsCharts}/>
+  render() {
+    return (
+      <div className= "projects__container databoard">
+        <Header title= {this.texts.title} />
+        <ProjectListStatusBar projectsdata= {this.props.projectsdata}
+          updateState={this.props.updateState}
+          retrieveFromApi={this.props.retrieveFromApi}
+         />
+        <div className= "statistics__chart">
+          <div className= "chart__details">
+            <p>Proyectos más activos (commits)</p>
+            <MostCommitsChart data= {this.props.projectsCharts} />
+          </div>
+          <div className= "chart__details">
+            <p>Proyectos más activos (horas)</p>
+            <MostHoursChart hours= {this.props.hoursCharts} />
+          </div>
         </div>
-        <div className="chart-commits">
-          <p>Proyectos más activos (horas)</p>
-          <MostHoursChart hours={this.state.hoursCharts}/>
-        </div>
+        <Notifications />
       </div>
-      <Notifications />
-    </div>
-  );
-}
+    );
+  }
 }
 
 export default Projects;

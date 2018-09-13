@@ -4,61 +4,49 @@
   justify-content: space-between;
   align-items: center;
 }
-
 .project__hours{
  background-color: $statisticsDataTotalHours;
 }
-
 .project__hours--week{
   background-color: $statisticsDataHoursPerWeek;
 }
-
 .project__commits{
   background-color: $statisticsDataProjectCommit;
 }
-
 .progress__integer--completed{
   color: $numbers;
   font-size: $normal;
   font-weight: $medium;
 }
-
-.detailedprojects__statistics--container{
+.detailed-projects__statistics--container{
   display: grid;
   grid-template-columns: 2fr 1fr 0.6fr 0.8fr;
   grid-template-rows: 134px;
   grid-gap: 27px;
   margin-bottom: 36px;
 }
-
 .statistics__charts {
   display: grid;
   grid-template-columns: 1.25fr 0.75fr;
-
 }
-
 .top-contributors__chart{
-  margin: 31px; 
+  margin: 31px;
 }
-
 .chart__project--completed-tasks {
   height: 588px;
   background-color: $chartTasks;
   margin-right: 25px;
 }
-
 .chart__project--top-contributors {
   height: 588px;
   background-color: $chartContributors;
 }
-
 .top-contributors__title{
   font-weight: $bold;
   font-size: $large;
   letter-spacing: 2.1px;
   color: $paragraph;
 }
-
 .top-contributors__list{
   margin-top: 22px;
   font-weight: $semibold;
@@ -70,9 +58,7 @@
   flex-direction: column;
   list-style: none;
 }
-
 .top-contributors__list--element{
   padding: 15.5px;
   border-bottom: 1px solid $chartTasks;
 }
-

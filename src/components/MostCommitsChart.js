@@ -1,14 +1,13 @@
 import React from 'react';
 import { Chart } from 'devextreme-react';
 
-
-const settings =
+const settings=
 {
   type: "bar",
   argumentField: "projectName",
   color: "green"
 };
-const series  =
+const series=
 [
   {
     color: "#57718D",
@@ -16,20 +15,20 @@ const series  =
     label: {
       visible: true,
       backgroundColor: "none",
+      position: "outside",
       font: {
         color: "white",
         size: 25,
         family: "Open Sans"
-      }
+      },
     }
   },
-
 ];
-const size =
+const size=
 {
   height: 300
 }
-const axisSettings =
+const axisSettings=
 {
   label: {
     overlappingBehavior: "none",
@@ -42,8 +41,9 @@ const axisSettings =
   grid:{
     visible: false
   },
+  maxValueMargin: 0.1,
 }
-const legendsSettings = {
+const legendsSettings= {
   visible: false
 }
 
@@ -52,13 +52,13 @@ class MostCommitsChart extends React.Component {
   render(){
     return (
       <Chart
-        dataSource={this.props.data}
-        commonSeriesSettings={settings}
-        series={series}
-        size={size}
-        argumentAxis={axisSettings}
-        valueAxis={axisSettings}
-        legend={legendsSettings}
+        dataSource= {this.props.data}
+        commonSeriesSettings= {settings}
+        series= {series}
+        size= {size}
+        argumentAxis= {axisSettings}
+        valueAxis= {axisSettings}
+        legend= {legendsSettings}
       />
     );
   }

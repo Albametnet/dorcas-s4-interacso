@@ -3,13 +3,9 @@ import React from 'react';
 class Header extends React.Component {
   render(){
     return (
-      <div className="header__container">
-        <h1 className="header__title--which-dashboard">
+      <div className= "header__container">
+        <h1 className= "header__title--which-dashboard">
           {this.props.title}
-        </h1>
-        <h1 className="header__title--which-project">
-          {this.props.separator} 
-          {this.props.subtitle}
         </h1>
       </div>
     );

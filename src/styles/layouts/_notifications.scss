@@ -3,10 +3,9 @@
   grid-template-columns: 0.22fr 0.78fr;
   margin-top: 30px;
   color: $titles;
-  font-family: $montserrat;
+  font-family: $montserrat, $sansSe;
   height: 70px;
 }
-
 .footer__notif-details {
   display: grid;
   grid-template-columns: 0.22fr 0.56fr 0.22fr;
@@ -14,12 +13,10 @@
   padding-left: 32px;
   background-color: $footerDetails;
 }
-
 .footer__bell{
   text-align: center;
 }
-
-.footer__notif-number {
+.footer__notif--number {
   font-size: $normal;
   font-weight: $bold;
   letter-spacing: 2.1px;
@@ -28,25 +25,21 @@
   align-items: center;
   justify-content: center;
 }
-
-.detail__notif-category {
+.detail__notif--category {
   display: flex;
   font-size: $normal;
   font-weight: $semibold;
   letter-spacing: 1.8px;
 }
-
-.detail__notif-type{
+.detail__notif--type {
   margin-left: 3px;
 }
-
-.detail__notif-content {
+.detail__notif--content {
   font-size: $normal;
   font-weight: $semibold;
   letter-spacing: 1.8px;
 }
-
-.detail__notif-time {
+.detail__notif--time {
   font-size: $small;
   font-weight: $regular;
   letter-spacing: 1.8px;

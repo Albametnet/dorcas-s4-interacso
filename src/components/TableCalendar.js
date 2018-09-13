@@ -1,23 +1,31 @@
 import React from 'react';
-import Env from '../data/.env.json';
 
 class TableCalendar extends React.Component {
   constructor(props){
     super(props);
     this.milisecondsInADay= 86400000;
-    this.state= {
-      datesToPrint: this.getCalendarDates()
-    };
+    if (
+      typeof this.props.datesToPrint !== 'undefined' &&
+      this.props.datesToPrint.length === 0
+    ) {
+      this.getCalendarDates(this.props.datesToPrint);
+    }
+    this.setDatesNotifications = this.setDatesNotifications.bind(this);
   }
 
   componentDidMount() {
-    this.getCalendarNotifications();
+    this.props.retrieveFromApi('calendar').then(apiResponse => {
+      if (this.props.calendarLoaded === false) {
+        this.setDatesNotifications(apiResponse.data);
+        this.props.updateState({calendarLoaded: true});
+      }
+    });
   }
 
   makeCalendarStructure() {
     let datesInHTML= [];
     const todayDate= new Date();
-    this.state.datesToPrint.forEach(dateToPrint => {
+    this.props.datesToPrint.forEach(dateToPrint => {
       let dayContainerClass= 'day__container ';
       if (dateToPrint.events.length !== 0) {
         dayContainerClass += 'day__container--with-event';
@@ -89,10 +97,9 @@ class TableCalendar extends React.Component {
     return nextWeekInMiliseconds;
   }
 
-  getCalendarDates() {
+  getCalendarDates(datesToPrint) {
     let calendarDate= this.calculateStartDate();
     let weekDays= 0;
-    let datesToPrint= [];
     for (let i = 0; i < 20; i++) {
       datesToPrint.push(
         {
@@ -110,7 +117,7 @@ class TableCalendar extends React.Component {
           weekDays++;
         }
       }
-      return datesToPrint;
+      this.props.updateState({datesToPrint:datesToPrint});
     }
 
   formatDate(date) {
@@ -119,39 +126,8 @@ class TableCalendar extends React.Component {
     return date.getFullYear() + '-' + month + '-' + day;
   }
 
-  getCalendarNotifications() {
-    if(typeof Env !== "undefined" & Env.token !== "undefined") {
-      fetch(
-        this.props.apiService + 'calendar',
-        {
-          method: 'get',
-          withCredentials: true,
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Authorization': Env.token,
-            'Content-Type': 'application/json'
-          }
-        }
-      ).then(response => {
-        if(response.status === 401){
-          throw Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      }
-      ).then(json => {
-        this.setDatesNotifications(json.data);
-      }).catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
-      });
-    } else {
-      alert("No está usted autorizado");
-    }
-  }
-
-  setDatesNotifications(apiResponse){
-    const datesToPrint= this.state.datesToPrint;
+  setDatesNotifications(apiResponse) {
+    const datesToPrint = this.props.datesToPrint;
     datesToPrint.forEach((dateToPrint, index) => {
       apiResponse.forEach(dayFromApi => {
         if (dayFromApi.datecalendar === dateToPrint.date) {
@@ -168,9 +144,9 @@ class TableCalendar extends React.Component {
       });
       datesToPrint[index]= dateToPrint;
     });
-    this.setState({
+    this.props.updateState({
       datesToPrint: datesToPrint
-    })
+    });
   }
 
   incrementDaysInMiliseconds(date, numDays) {

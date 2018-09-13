@@ -2,52 +2,17 @@ import React from "react";
 import Env from "../data/.env.json";
 
 class ProjectListStatusBar extends React.Component {
-  constructor(props) {
+  constructor(props){
     super(props);
-
-    this.state= {
-      projectsdata: []
-    };
   }
-
   componentDidMount() {
-    this.callProjectsData();
-  }
-
-  callProjectsData() {
-    if ((typeof Env !== "undefined") & (Env.token !== "undefined")) {
-      fetch(this.props.apiService + "projects", {
-        method: "get",
-        withCredentials: true,
-        headers: {
-          "Cache-Control": "no-cache",
-          Authorization: Env.token,
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => {
-        if (response.status === 401) {
-          throw Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      })
-      .then(json => {
-        this.setState({
-          projectsdata: json.data[0]
-        });
-      })
-      .catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
-      });
-    } else {
-      alert("No está usted autorizado");
-    }
+    this.props.retrieveFromApi("projects").then(apiResponse => {
+      this.props.updateState({projectsdata: apiResponse.data[0]})
+    });
   }
 
   render() {
-    const projects= this.state.projectsdata;
+    const projects= this.props.projectsdata;
     return (
       <div className= "projects__statistics--container">
         <div className= "statistics__data projects__projects">

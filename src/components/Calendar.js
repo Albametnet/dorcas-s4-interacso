@@ -13,7 +13,12 @@ class Calendar extends React.Component {
     return (
       <div className= "databoard">
         <Header title= {this.texts.title}/>
-        <TableCalendar apiService= {this.props.apiService}/>
+        <TableCalendar
+          datesToPrint={this.props.datesToPrint}
+          calendarLoaded={this.props.calendarLoaded}
+          updateState={this.props.updateState}
+          retrieveFromApi = {this.props.retrieveFromApi}
+        />
       </div>
     );
   }

@@ -13,52 +13,14 @@ class Team extends React.Component {
     this.texts= {
       title: "Equipo"
     }
-    this.state= {
-      weekChartData: [],
-      memberPics: [],
-      tasksWinner: {},
-      commitsWinner: {}
-    }
   }
 
-  componentDidMount() {
-    this.getKillerInfo();
-  }
-
-  getKillerInfo() {
-    if(typeof Env !== "undefined" & Env.token !== "undefined") {
-      fetch(
-        this.props.apiService + 'team',
-        {
-          method: 'get',
-          withCredentials: true,
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Authorization': Env.token,
-            'Content-Type': 'application/json'
-          }
-        }
-      )
-      .then(response => {
-        if(response.status === 401){
-          throw Error(response.statusText);
-        } else {
-          return response.json();
-          }
-        }
-      )
-      .then(json => {
-        this.getAverage(json);
-        this.getTasksWinner(json);
-        this.getCommitsWinner(json);
-      })
-      .catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
-      });
-    } else {
-      alert("No está usted autorizado");
-    }
+componentDidMount() {
+    this.props.retrieveFromApi("team").then(apiResponse => {
+      this.getAverage(apiResponse);
+      this.getTasksWinner(apiResponse);
+      this.getCommitsWinner(apiResponse);
+    });
   }
 
   getAverage(json) {
@@ -76,7 +38,7 @@ class Team extends React.Component {
       });
       memberPicsData.push(person.photo);
     });
-    this.setState({
+      this.props.updateState({
       weekChartData: teamData,
       memberPics: memberPicsData,
       averageTask: averageTask/json.data.length,
@@ -93,7 +55,7 @@ class Team extends React.Component {
         winnerTasksObj= json.data[i];
       }
     }
-    this.setState({
+    this.props.updateState({
       tasksWinner: winnerTasksObj,
     });
   }
@@ -107,7 +69,7 @@ class Team extends React.Component {
         winnerCommitsObj= peopleData;
       }
     });
-    this.setState({
+    this.props.updateState({
       commitsWinner: winnerCommitsObj,
     });
   }
@@ -118,29 +80,29 @@ class Team extends React.Component {
         <Header title= {this.texts.title} />
         <div className= "main__container--team">
           <WeekTasksChart
-            data= {this.state.weekChartData}
-            memberPics= {this.state.memberPics}
+            data= {this.props.weekChartData}
+            memberPics= {this.props.memberPics}
           />
           <WeekCommitsChart
-            data= {this.state.weekChartData}
-            memberPics= {this.state.memberPics}
+            data= {this.props.weekChartData}
+            memberPics= {this.props.memberPics}
           />
           <TeamStatusBar
-            averageTask= {this.state.averageTask}
-            averageCommits= {this.state.averageCommits}
+            averageTask= {this.props.averageTask}
+            averageCommits= {this.props.averageCommits}
           />
           <div className= "dashboard people__container--asana">
             <p className= "asana__title">Asana killer</p>
-            <img className= "profile__pic" src={this.state.tasksWinner.photo}></img>
-            <p className= "killer__name">{this.state.tasksWinner.nombre}</p>
-            <p className= "killer__record">{this.state.tasksWinner.tasks}</p>
+            <img className= "profile__pic" src={this.props.tasksWinner.photo}></img>
+            <p className= "killer__name">{this.props.tasksWinner.nombre}</p>
+            <p className= "killer__record">{this.props.tasksWinner.tasks}</p>
             <p className= "killer__detail">Tareas completadas esta semana</p>
           </div>
           <div className= "dashboard people__container--git">
             <p className= "git__title">Git killer</p>
-            <img className= "profile__pic" src={this.state.commitsWinner.photo}></img>
-            <p className= "killer__name">{this.state.commitsWinner.nombre}</p>
-            <p className= "killer__record">{this.state.commitsWinner.commits}</p>
+            <img className= "profile__pic" src={this.props.commitsWinner.photo}></img>
+            <p className= "killer__name">{this.props.commitsWinner.nombre}</p>
+            <p className= "killer__record">{this.props.commitsWinner.commits}</p>
             <p className= "killer__detail">Commits esta semana</p>
           </div>
         </div>

@@ -12,80 +12,53 @@ class Projects extends React.Component {
     this.texts= {
       title: "Proyectos"
     };
-    this.state= {
-      projectsCharts: [],
-      hoursCharts: []
-    };
-    this.getProjectsData= this.getProjectsData.bind(this);
   }
 
   componentDidMount() {
-    this.getProjectsData();
+    this.props.retrieveFromApi("projects").then(apiResponse => {
+      this.saveCommitsAndHours(apiResponse);
+    });
   }
 
-  getProjectsData() {
-    if ((typeof Env !== "undefined") & (Env.token !== "undefined")) {
-      fetch(this.props.apiService + "projects", {
-        method: "get",
-        withCredentials: true,
-        headers: {
-          "Cache-Control": "no-cache",
-          Authorization: Env.token,
-          "Content-Type": "application/json"
-        }
-      })
-      .then(response => {
-        if (response.status === 401) {
-          throw Error(response.statusText);
-        } else {
-          return response.json();
-        }
-      })
-      .then(json => {
-        const projectsData= [];
-        for (var elemento in json.data[0].commitRank) {
-          projectsData.push({
-            projectName: elemento,
-            commits: json.data[0].commitRank[elemento]
-          });
-        }
-        this.setState({
-          projectsCharts: projectsData
-        });
-        const hoursData= [];
-        for (var hoursProject in json.data[0].hourRank) {
-          hoursData.push({
-            hoursName: hoursProject,
-            time: json.data[0].hourRank[hoursProject]
-          });
-        }
-        this.setState({
-          hoursCharts: hoursData
-        });
-        console.log(hoursData);
-      })
-      .catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
+  saveCommitsAndHours(apiResponse) {
+    const projectsData= [];
+    for (var elemento in apiResponse.data[0].commitRank) {
+      projectsData.push({
+        projectName: elemento,
+        commits: apiResponse.data[0].commitRank[elemento]
       });
-    } else {
-      alert("No está usted autorizado");
     }
+    this.props.updateState({
+      projectsCharts: projectsData
+    });
+    const hoursData= [];
+    for (var hoursProject in apiResponse.data[0].hourRank) {
+      hoursData.push({
+        hoursName: hoursProject,
+        time: apiResponse.data[0].hourRank[hoursProject]
+      });
+    }
+    this.props.updateState({
+      hoursCharts: hoursData
+    });
   }
 
   render() {
     return (
       <div className= "projects__container databoard">
         <Header title= {this.texts.title} />
-        <ProjectListStatusBar apiService= {this.props.apiService} />
+        <ProjectListStatusBar projectsdata= {this.props.projectsdata}
+          updateState={this.props.updateState}
+          retrieveFromApi={this.props.retrieveFromApi}
+         />
         <div className= "statistics__chart">
           <div className= "chart__details">
             <p>Proyectos más activos (commits)</p>
-            <MostCommitsChart data= {this.state.projectsCharts} />
+            <MostCommitsChart data= {this.props.projectsCharts} />
           </div>
           <div className= "chart__details">
             <p>Proyectos más activos (horas)</p>
-            <MostHoursChart hours= {this.state.hoursCharts} />
+            <MostHoursChart hours= {this.props.hoursCharts} />
           </div>
         </div>
         <Notifications />

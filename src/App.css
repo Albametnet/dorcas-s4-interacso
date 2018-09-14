@@ -359,7 +359,16 @@
 
 .top-contributors__list--element {
   padding: 15.5px;
-  border-bottom: 1px solid #17517f; }
+  border-bottom: 1px solid #17517f;
+  display: flex;
+  flex-direction: row; }
+
+.top-contributors__list--name {
+  padding-left: 40px; }
+
+.top-contributors__list--commits {
+  padding-right: 40px;
+  text-align: right; }
 
 .footer__container {
   display: grid;

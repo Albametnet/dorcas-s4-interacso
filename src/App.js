@@ -27,16 +27,17 @@ class App extends Component {
       tasksWinner: {},
       commitsWinner: {},
       averageTask: 0,
-      averageCommits: 0
+      averageCommits: 0,
+      topContributors: []
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
-  componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
-  }
+  // componentDidMount() {
+  //   this.effect= setInterval(this.showNextDashboard, 3000);
+  // }
 
   updateState(object) {
     this.setState(object);
@@ -104,9 +105,15 @@ class App extends Component {
     }
     return (
       <div className= "visor" style={sliderStyles}>
+        <ProjectDetail projectsdata= {this.state.projectsdata}
+          topContributors={this.state.topContributors}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+        />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
          />
         <Projects projectsdata= {this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
@@ -114,14 +121,15 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        <ProjectDetail />
+
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}
           commitsWinner={this.state.commitsWinner}
           averageTask={this.state.averageTask}
           averageCommits={this.state.averageCommits}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}

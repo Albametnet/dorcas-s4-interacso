@@ -18,11 +18,13 @@ class ProjectDetailBar extends React.Component {
     const hours= (this.props.projectHours)
     const commits= (this.props.projectCommits)
     const tasks= (this.props.projectTasks)
+    const percentage = Math.round(
+      this.props.projectTasks.completed / this.props.projectTasks.total*100 )
     return (
       <div className= "detailed-projects__statistics--container">
         <div className= "statistics__data project__progress">
           <div className= "project-progress__percentage">
-            <div className= "data__number"><p>55%</p></div>
+            <div className= "data__number"><p>{percentage}%</p></div>
             <div className= "data__tags"><p>progreso</p></div>
           </div>
           <div className= "project-progress__integer">

@@ -16,6 +16,10 @@
 .day__container {
   background-color: $calendarDayContainer;
   padding: 25px;
+  box-sizing: border-box;
+}
+.day__container--today {
+  border: 10px solid $selectedDay;
 }
 .day__container--with-event {
   border-bottom: solid 10px $eventDetail;
@@ -26,6 +30,9 @@
   display: inline-block;
   vertical-align: bottom;
   overflow: auto;
+}
+.day__label--today {
+  color: $selectedDay;
 }
 .day__notifications-deadline--completed {
   color: $deadlineFinished;

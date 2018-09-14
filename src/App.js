@@ -37,9 +37,9 @@ class App extends Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
-  }
+  // componentDidMount() {
+  //   this.effect= setInterval(this.showNextDashboard, 3000);
+  // }
 
   updateState(object) {
     this.setState(object);

@@ -26,13 +26,15 @@ class TableCalendar extends React.Component {
     let datesInHTML= [];
     const todayDate= new Date();
     this.props.datesToPrint.forEach(dateToPrint => {
-      let dayContainerClass= 'day__container ';
+
+      const colorContainer = this.getTodayColor(dateToPrint.dateObject, todayDate);
+      let dayContainerClass= 'day__container ' + 'day__container' + colorContainer;
       if (dateToPrint.events.length !== 0) {
-        dayContainerClass += 'day__container--with-event';
+        dayContainerClass = 'day__container--with-event ' + 'day__container' + colorContainer;
       }
       datesInHTML.push(
-        <div className= {dayContainerClass} key={dateToPrint.label}>
-          <div className= "day__label">{dateToPrint.label}</div>
+        <div className={dayContainerClass} key={dateToPrint.label}>
+          <div className= {"day__label " + "day__label" + colorContainer}>{dateToPrint.label}</div>
           <div className= "day__notifications">
             {this.makeEventsStructure(dateToPrint.events)}
             {this.makeDeadlinesStructure(dateToPrint.deadlines, dateToPrint.dateObject, todayDate)}
@@ -89,6 +91,13 @@ class TableCalendar extends React.Component {
       }
     }
 
+  }
+  getTodayColor(dateObject, todayDate) {
+    if(dateObject.getDate() === todayDate.getDate()) {
+      return "--today ";
+    }else {
+      return " ";
+    }
   }
 
   nextWeekAndRestOfThisWeek(todayDate){

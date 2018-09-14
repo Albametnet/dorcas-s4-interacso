@@ -34,9 +34,9 @@ class App extends Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
-  }
+  // componentDidMount() {
+  //   this.effect= setInterval(this.showNextDashboard, 3000);
+  // }
 
   updateState(object) {
     this.setState(object);
@@ -104,10 +104,10 @@ class App extends Component {
     }
     return (
       <div className= "visor" style={sliderStyles}>
-        <Calendar datesToPrint={this.state.datesToPrint}
+        {/* <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
-         />
+         /> */}
         <Projects projectsdata= {this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}

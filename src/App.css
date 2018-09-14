@@ -147,6 +147,9 @@
 .dx-visibility-change-handler {
   margin-top: 100px; }
 
+.sizing__box {
+  height: 100%; }
+
 .dashboard {
   background-color: grey;
   display: flex;

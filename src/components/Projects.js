@@ -47,6 +47,7 @@ class Projects extends React.Component {
     return (
       <div className= "projects__container databoard">
         <Header title= {this.texts.title} />
+        <div className= "sizing__box">
         <ProjectListStatusBar projectsdata= {this.props.projectsdata}
           updateState={this.props.updateState}
           retrieveFromApi={this.props.retrieveFromApi}
@@ -62,6 +63,8 @@ class Projects extends React.Component {
           </div>
         </div>
         <Notifications />
+        </div>
+        
       </div>
     );
   }

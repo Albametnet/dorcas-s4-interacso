@@ -1,6 +1,7 @@
 import React from 'react';
 import Header from './Header';
 import ProjectsDetailStatusBar from './ProjectDetailStatusBar';
+import ProjectBurndownChart from './ProjectBurndownChart';
 import Notifications from './Notifications';
 
 class ProjectDetail extends React.Component {
@@ -16,15 +17,14 @@ class ProjectDetail extends React.Component {
       <div className= "detailedprojects__container databoard">
         <Header title= {this.texts.title} />
         <div className= "detailedprojects__content">
-          <ProjectsDetailStatusBar 
+          <ProjectsDetailStatusBar
           projectHours={this.props.projectHours}
           projectCommits={this.props.projectCommits}
           projectTasks={this.props.projectTasks}
           updateState={this.props.updateState}
           retrieveFromApi={this.props.retrieveFromApi}/>
-          <div className= "statistics__charts">
-            <div className= "chart__project--completed-tasks">
-            </div>
+        <div className= "statistics__charts">
+          <ProjectBurndownChart/>
             <div className= "chart__project--top-contributors">
               <div className= "top-contributors__chart">
                 <p className= "top-contributors__title">Top contributors</p>
@@ -36,11 +36,11 @@ class ProjectDetail extends React.Component {
                   <li className= "top-contributors__list--element">#5</li>
                   <li className= "top-contributors__list--element">#6</li>
                 </ul>
-              </div>
             </div>
           </div>
         </div>
-        <Notifications />
+      </div>
+        <Notifications/>
       </div>
     );
   }

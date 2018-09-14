@@ -37,9 +37,9 @@ class App extends Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
-  }
+  // componentDidMount() {
+  //   this.effect= setInterval(this.showNextDashboard, 3000);
+  // }
 
   updateState(object) {
     this.setState(object);
@@ -107,9 +107,16 @@ class App extends Component {
     }
     return (
       <div className= "visor" style={sliderStyles}>
+
+      <ProjectDetail projectHours={this.state.projectHours}
+        projectCommits={this.state.projectCommits}
+        projectTasks={this.state.projectTasks}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+        />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}           
+          updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
          />
         <Projects projectsdata= {this.state.projectsdata}
@@ -118,19 +125,13 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        <ProjectDetail projectHours={this.state.projectHours}
-          projectCommits={this.state.projectCommits}
-          projectTasks={this.state.projectTasks}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-          />
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}
           commitsWinner={this.state.commitsWinner}
           averageTask={this.state.averageTask}
           averageCommits={this.state.averageCommits}
-          updateState={this.updateState}           
+          updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
         <Calendar datesToPrint={this.state.datesToPrint}

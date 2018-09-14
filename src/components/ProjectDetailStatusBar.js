@@ -1,7 +1,19 @@
 import React from "react";
 
 class ProjectDetailBar extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  
+  
+  componentDidMount() {
+    this.props.retrieveFromApi("projects/650687808730806").then(apiResponse => {
+      this.props.updateState({projectHours: apiResponse [0]})
+    });
+  }
+
   render() {
+    const hours = this.props.projectHours
     return (
       <div className= "detailed-projects__statistics--container">
         <div className= "statistics__data project__progress">
@@ -14,7 +26,7 @@ class ProjectDetailBar extends React.Component {
           </div>
         </div>
         <div className= "statistics__data project__hours">
-          <div className= "data__number"><p>2500</p></div>
+          <div className= "data__number"><p>{hours.total}</p></div>
           <div className= "data__tags"><p>horas</p></div>
         </div>
         <div className= "statistics__data project__hours--week">

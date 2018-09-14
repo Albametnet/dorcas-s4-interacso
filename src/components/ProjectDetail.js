@@ -16,7 +16,10 @@ class ProjectDetail extends React.Component {
       <div className= "detailedprojects__container databoard">
         <Header title= {this.texts.title} />
         <div className= "detailedprojects__content">
-          <ProjectsDetailStatusBar />
+          <ProjectsDetailStatusBar 
+          projectHours={this.props.projectHours}
+          updateState={this.props.updateState}
+          retrieveFromApi={this.props.retrieveFromApi}/>
           <div className= "statistics__charts">
             <div className= "chart__project--completed-tasks">
             </div>

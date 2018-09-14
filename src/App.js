@@ -27,7 +27,8 @@ class App extends Component {
       tasksWinner: {},
       commitsWinner: {},
       averageTask: 0,
-      averageCommits: 0
+      averageCommits: 0,
+      projectHours: []
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -106,7 +107,8 @@ class App extends Component {
       <div className= "visor" style={sliderStyles}>
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+          updateState={this.updateState}           
+          retrieveFromApi={this.retrieveFromApi}
          />
         <Projects projectsdata= {this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
@@ -114,14 +116,18 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        <ProjectDetail />
+        <ProjectDetail projectHours={this.state.projectHours}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+          />
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}
           commitsWinner={this.state.commitsWinner}
           averageTask={this.state.averageTask}
           averageCommits={this.state.averageCommits}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+          updateState={this.updateState}           
+          retrieveFromApi={this.retrieveFromApi}
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}

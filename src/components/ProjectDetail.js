@@ -18,6 +18,8 @@ class ProjectDetail extends React.Component {
         <div className= "detailedprojects__content">
           <ProjectsDetailStatusBar 
           projectHours={this.props.projectHours}
+          projectCommits={this.props.projectCommits}
+          projectTasks={this.props.projectTasks}
           updateState={this.props.updateState}
           retrieveFromApi={this.props.retrieveFromApi}/>
           <div className= "statistics__charts">

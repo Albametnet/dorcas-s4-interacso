@@ -8,12 +8,16 @@ class ProjectDetailBar extends React.Component {
   
   componentDidMount() {
     this.props.retrieveFromApi("projects/650687808730806").then(apiResponse => {
-      this.props.updateState({projectHours: apiResponse [0]})
+      this.props.updateState({projectHours: apiResponse.hours})
+      this.props.updateState ({projectCommits: apiResponse})
+      this.props.updateState({projectTasks: apiResponse.tasks})
     });
   }
 
   render() {
-    const hours = this.props.projectHours
+    const hours= (this.props.projectHours)
+    const commits= (this.props.projectCommits)
+    const tasks= (this.props.projectTasks)
     return (
       <div className= "detailed-projects__statistics--container">
         <div className= "statistics__data project__progress">
@@ -22,7 +26,7 @@ class ProjectDetailBar extends React.Component {
             <div className= "data__tags"><p>progreso</p></div>
           </div>
           <div className= "project-progress__integer">
-            <p className= "progress__integer--completed">550/1000</p>
+            <p className= "progress__integer--completed">{tasks.completed}/{tasks.total}</p>
           </div>
         </div>
         <div className= "statistics__data project__hours">
@@ -30,11 +34,11 @@ class ProjectDetailBar extends React.Component {
           <div className= "data__tags"><p>horas</p></div>
         </div>
         <div className= "statistics__data project__hours--week">
-          <div className= "data__number"><p>50</p></div>
+          <div className= "data__number"><p>{hours.week}</p></div>
           <div className= "data__tags"><p>horas semana</p></div>
         </div>
         <div className= "statistics__data project__commits">
-          <div className= "data__number"><p>1800</p></div>
+          <div className= "data__number"><p>{commits.commits}</p></div>
           <div className= "data__tags"><p>commits</p></div>
         </div>
       </div>

@@ -7,9 +7,31 @@ import Notifications from './Notifications';
 class ProjectDetail extends React.Component {
   constructor(props){
     super(props)
-    this.texts= {
+    this.texts = {
       title: `Proyectos > ${this.props.projectName}`
     }
+    this.state = {
+      projectData: {
+        hours: "",
+        commits: "",
+        tasks: "",
+        contributors: "",
+      },
+      projectTasks: []
+    }
+  }
+
+  componentDidMount() {
+    this.props.retrieveFromApi(`projects/${this.props.projectId}`).then(apiResponse => {
+      this.setState({
+        projectData: apiResponse
+      });
+    });
+    this.props.retrieveFromApi(`projects/${this.props.projectId}/tasks`).then(apiResponse => {
+      this.setState({
+        projectTasks: apiResponse
+      });
+    });
   }
 
   render(){
@@ -19,13 +41,15 @@ class ProjectDetail extends React.Component {
         <div className= "detailedprojects__content">
           <ProjectsDetailStatusBar
           projectId={this.props.projectId}
-          projectHours={this.props.projectHours}
-          projectCommits={this.props.projectCommits}
-          projectTasks={this.props.projectTasks}
+          projectHours={this.state.projectData.hours}
+          projectCommits={this.state.projectData.commits}
+          projectTasks={this.state.projectData.tasks}
           updateState={this.props.updateState}
           retrieveFromApi={this.props.retrieveFromApi}/>
         <div className= "statistics__charts">
-          <ProjectBurndownChart/>
+          <ProjectBurndownChart
+           projectTasks={this.state.projectTasks}
+           />
             <div className= "chart__project--top-contributors">
               <div className= "top-contributors__chart">
                 <p className= "top-contributors__title">Top contributors</p>

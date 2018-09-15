@@ -72,6 +72,7 @@ class ProjectBurndownChart extends React.Component {
       <div className= "statistics__charts">
         <div className= "chart__project--completed-tasks">
         <Chart
+          dataSource= {this.props.projectTasks}
           commonSeriesSettings= {settings}
           series= {series}
           size= {size}

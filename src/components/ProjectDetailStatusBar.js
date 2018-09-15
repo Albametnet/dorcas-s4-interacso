@@ -11,7 +11,12 @@ class ProjectDetailBar extends React.Component {
     const commits= (this.props.projectCommits)
     const tasks= (this.props.projectTasks)
     const percentage = Math.round(
-      this.props.projectTasks.completed / this.props.projectTasks.total*100 )
+      this.props.projectTasks.completed / this.props.projectTasks.total*100
+    )
+    let total = tasks.total;
+    if (total == 0) {
+      total = 1;
+    }
     return (
       <div className= "detailed-projects__statistics--container">
         <div className= "statistics__data project__progress">

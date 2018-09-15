@@ -36,17 +36,19 @@ class ProjectDetail extends React.Component {
           projectTasks: generatedData
         });
       }
+
     });
   }
 
   generateChartData(tasks) {
     const totals = {};
     const currentWeekOfYear = moment().isoWeek();
+    const currentYear = moment().year();
     for (let week = 1; week <= 52; week++) {
       totals[week] = {
         created: 0,
         completed: 0,
-        weekFirst: moment(2018).add(week - 1, 'weeks').format("MMM \nD")
+        weekFirst: moment(currentYear).add(week - 1, 'weeks').format("MMM D")
       }
     }
 
@@ -83,8 +85,7 @@ class ProjectDetail extends React.Component {
           projectHours={this.state.projectData.hours}
           projectCommits={this.state.projectData.commits}
           projectTasks={this.state.projectData.tasks}
-          updateState={this.props.updateState}
-          retrieveFromApi={this.props.retrieveFromApi}/>
+          />
         <div className= "statistics__charts">
           <ProjectBurndownChart
            data={this.state.projectTasks}

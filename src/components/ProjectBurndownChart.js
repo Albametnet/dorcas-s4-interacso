@@ -1,7 +1,6 @@
 import React from 'react';
 import { Chart } from 'devextreme-react';
 
-
 const settings=
 {
   type: "line",

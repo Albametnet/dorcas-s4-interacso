@@ -31,9 +31,9 @@ class App extends Component {
       projectHours: {},
       projectCommits: 0,
       projectTasks: {},
-      projects: []
+      projects: [],
     }
-    this.showNextDashboard= this.showNextDashboard.bind(this);
+    this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
   }

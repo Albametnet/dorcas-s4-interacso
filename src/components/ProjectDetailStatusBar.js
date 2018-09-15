@@ -3,7 +3,6 @@ import React from "react";
 class ProjectDetailBar extends React.Component {
   constructor(props){
     super(props);
-    console.log(props);
   }
 
 

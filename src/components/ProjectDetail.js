@@ -42,20 +42,17 @@ class ProjectDetail extends React.Component {
   generateChartData(tasks) {
     const totals = {};
     const currentWeekOfYear = moment().isoWeek();
+    for (let week = 1; week <= 52; week++) {
+      totals[week] = {
+        created: 0,
+        completed: 0,
+        weekFirst: moment(2018).add(week - 1, 'weeks').format("MMM \nD")
+      }
+    }
 
     tasks.forEach(task => {
       const taskYear = moment(task.created_at).year();
       const weekOfYear = moment(task.created_at).isoWeek();
-      if (weekOfYear + 5 < currentWeekOfYear) {
-        return;
-      }
-      if (totals[weekOfYear] == undefined) {
-        totals[weekOfYear] = {
-          created: 0,
-          completed: 0,
-          weekFirst: moment(taskYear).add(weekOfYear, 'weeks').format("MMM D")
-        }
-      }
       totals[weekOfYear].created = totals[weekOfYear].created + 1;
       if (task.completed){
         totals[weekOfYear].completed = totals[weekOfYear].completed + 1;
@@ -70,12 +67,10 @@ class ProjectDetail extends React.Component {
         created: totals[day].created,
       })
     }
-    console.log(chartData);
     chartData.sort((a, b) => {
       return a.weekNumber - b.weekNumber
-
-    } )
-    return chartData;
+    })
+    return chartData.slice(currentWeekOfYear - 6, currentWeekOfYear + 6);
   }
 
   render(){

@@ -30,16 +30,25 @@ class App extends Component {
       averageCommits: 0,
       projectHours: {},
       projectCommits: 0,
-      projectTasks: {}
+      projectTasks: {},
+      projects: []
     }
     this.showNextDashboard= this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.effect= setInterval(this.showNextDashboard, 3000);
-  // }
+  componentDidMount() {
+    this.effect= setInterval(this.showNextDashboard, 3000);
+    this.retrieveFromApi("projects/list").then(apiResponse => {
+      this.setState({
+        totalDataboards: this.state.totalDataboards + apiResponse.total,
+        projects: apiResponse.data
+      });
+      console.log(apiResponse.data)
+    });
+
+  }
 
   updateState(object) {
     this.setState(object);
@@ -77,6 +86,7 @@ class App extends Component {
     }
   }
 
+
   showNextDashboard(){
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {
       clearInterval(this.effect);
@@ -107,13 +117,6 @@ class App extends Component {
     }
     return (
       <div className= "visor" style={sliderStyles}>
-
-      <ProjectDetail projectHours={this.state.projectHours}
-        projectCommits={this.state.projectCommits}
-        projectTasks={this.state.projectTasks}
-        updateState={this.updateState}
-        retrieveFromApi={this.retrieveFromApi}
-        />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}
@@ -125,6 +128,16 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
+        {this.state.projects.map((project) =>
+          <ProjectDetail projectHours={this.state.projectHours}
+            projectCommits={this.state.projectCommits}
+            projectTasks={this.state.projectTasks}
+            updateState={this.updateState}
+            retrieveFromApi={this.retrieveFromApi}
+            projectId={project.gid}
+            projectName={project.name}
+            />
+        )}      
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}

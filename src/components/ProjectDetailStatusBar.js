@@ -4,10 +4,10 @@ class ProjectDetailBar extends React.Component {
   constructor(props){
     super(props);
   }
-  
-  
+
+
   componentDidMount() {
-    this.props.retrieveFromApi("projects/650687808730806").then(apiResponse => {
+    this.props.retrieveFromApi(`projects/${this.props.projectId}`).then(apiResponse => {
       this.props.updateState({projectHours: apiResponse.hours})
       this.props.updateState ({projectCommits: apiResponse})
       this.props.updateState({projectTasks: apiResponse.tasks})

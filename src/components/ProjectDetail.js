@@ -8,7 +8,7 @@ class ProjectDetail extends React.Component {
   constructor(props){
     super(props)
     this.texts= {
-      title: "Proyectos > IKEA JD"
+      title: `Proyectos > ${this.props.projectName}`
     }
   }
 
@@ -18,6 +18,7 @@ class ProjectDetail extends React.Component {
         <Header title= {this.texts.title} />
         <div className= "detailedprojects__content">
           <ProjectsDetailStatusBar
+          projectId={this.props.projectId}
           projectHours={this.props.projectHours}
           projectCommits={this.props.projectCommits}
           projectTasks={this.props.projectTasks}

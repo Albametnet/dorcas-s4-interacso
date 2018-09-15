@@ -1,9 +1,6 @@
 import React from 'react';
 import { Chart } from 'devextreme-react';
 
-const date= [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-const pending= [56, 56, 23, 5, 8, 9, 9, 67, 3, 3, 4, 4]
-const complete= [58, 16, 13, 5, 8, 9, 9, 7, 13, 3, 4, 5]
 
 const settings=
 {

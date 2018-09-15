@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment'
 import Header from './Header';
 import ProjectsDetailStatusBar from './ProjectDetailStatusBar';
 import ProjectBurndownChart from './ProjectBurndownChart';
@@ -19,6 +20,7 @@ class ProjectDetail extends React.Component {
       },
       projectTasks: []
     }
+  this.generateChartData= this.generateChartData.bind(this);
   }
 
   componentDidMount() {
@@ -28,10 +30,52 @@ class ProjectDetail extends React.Component {
       });
     });
     this.props.retrieveFromApi(`projects/${this.props.projectId}/tasks`).then(apiResponse => {
-      this.setState({
-        projectTasks: apiResponse
-      });
+      if (apiResponse.data != undefined) {
+        const generatedData = this.generateChartData(apiResponse.data);
+        this.setState({
+          projectTasks: generatedData
+        });
+      }
     });
+  }
+
+  generateChartData(tasks) {
+    const totals = {};
+    const currentWeekOfYear = moment().isoWeek();
+
+    tasks.forEach(task => {
+      const taskYear = moment(task.created_at).year();
+      const weekOfYear = moment(task.created_at).isoWeek();
+      if (weekOfYear + 5 < currentWeekOfYear) {
+        return;
+      }
+      if (totals[weekOfYear] == undefined) {
+        totals[weekOfYear] = {
+          created: 0,
+          completed: 0,
+          weekFirst: moment(taskYear).add(weekOfYear, 'weeks').format("MMM D")
+        }
+      }
+      totals[weekOfYear].created = totals[weekOfYear].created + 1;
+      if (task.completed){
+        totals[weekOfYear].completed = totals[weekOfYear].completed + 1;
+      }
+    });
+    const chartData = [];
+    for (let day in totals) {
+      chartData.push({
+        weekDay: totals[day].weekFirst,
+        weekNumber: day,
+        completed: totals[day].completed,
+        created: totals[day].created,
+      })
+    }
+    console.log(chartData);
+    chartData.sort((a, b) => {
+      return a.weekNumber - b.weekNumber
+
+    } )
+    return chartData;
   }
 
   render(){
@@ -48,7 +92,7 @@ class ProjectDetail extends React.Component {
           retrieveFromApi={this.props.retrieveFromApi}/>
         <div className= "statistics__charts">
           <ProjectBurndownChart
-           projectTasks={this.state.projectTasks}
+           data={this.state.projectTasks}
            />
             <div className= "chart__project--top-contributors">
               <div className= "top-contributors__chart">

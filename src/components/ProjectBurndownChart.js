@@ -8,49 +8,30 @@ const complete= [58, 16, 13, 5, 8, 9, 9, 7, 13, 3, 4, 5]
 const settings=
 {
   type: "line",
-  argumentField: "date",
+  argumentField: "weekDay",
   color: "green"
 };
 const series =
 [
   {
     color: "#f5a623",
-    valueField: "pending",
-    label: {
-      visible: true,
-      backgroundColor: "none",
-      position: "outside",
-      font: {
-        color: "white",
-        size: 25,
-        family: "Open Sans"
-      },
-    }
+    valueField: "completed",
   },
 
   {
     color: "#3dcef0",
-    valueField: "complete",
-    label: {
-      visible: true,
-      backgroundColor: "none",
-      position: "outside",
-      font: {
-        color: "white",
-        size: 25,
-        family: "Open Sans"
-      },
-    }
+    valueField: "created",
   },
 ];
 const size=
 {
-  height: 300
+  height: 300,
+  width: 1000
 }
 const axisSettings=
 {
   label: {
-    overlappingBehavior: "none",
+    overlappingBehavior: "rotate",
     font: {
       color: "white",
       family: "Open Sans",
@@ -63,7 +44,7 @@ const axisSettings=
   maxValueMargin: 0.1,
 }
 const legendsSettings= {
-  visible: true
+  visible: false
 }
 
 class ProjectBurndownChart extends React.Component {
@@ -72,7 +53,7 @@ class ProjectBurndownChart extends React.Component {
       <div className= "statistics__charts">
         <div className= "chart__project--completed-tasks">
         <Chart
-          dataSource= {this.props.projectTasks}
+          dataSource= {this.props.data}
           commonSeriesSettings= {settings}
           series= {series}
           size= {size}

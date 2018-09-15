@@ -39,7 +39,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
+    //this.effect= setInterval(this.showNextDashboard, 3000);
     this.retrieveFromApi("projects/list").then(apiResponse => {
       this.setState({
         totalDataboards: this.state.totalDataboards + apiResponse.total,
@@ -116,6 +116,17 @@ class App extends Component {
     }
     return (
       <div className= "visor" style={sliderStyles}>
+
+      {this.state.projects.map((project) =>
+        <ProjectDetail projectHours={this.state.projectHours}
+          projectCommits={this.state.projectCommits}
+          projectTasks={this.state.projectTasks}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+          projectId={project.gid}
+          projectName={project.name}
+          />
+      )}
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}
@@ -127,16 +138,6 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        {this.state.projects.map((project) =>
-          <ProjectDetail projectHours={this.state.projectHours}
-            projectCommits={this.state.projectCommits}
-            projectTasks={this.state.projectTasks}
-            updateState={this.updateState}
-            retrieveFromApi={this.retrieveFromApi}
-            projectId={project.gid}
-            projectName={project.name}
-            />
-        )}
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}

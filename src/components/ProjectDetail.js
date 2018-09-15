@@ -3,6 +3,7 @@ import moment from 'moment'
 import Header from './Header';
 import ProjectsDetailStatusBar from './ProjectDetailStatusBar';
 import ProjectBurndownChart from './ProjectBurndownChart';
+import LegendProjectDetail from './LegendProjectDetail';
 import Notifications from './Notifications';
 
 class ProjectDetail extends React.Component {
@@ -17,6 +18,8 @@ class ProjectDetail extends React.Component {
         commits: "",
         tasks: "",
         contributors: "",
+        totalCompleted: 0,
+        totalPending: 0
       },
       projectTasks: []
     }
@@ -61,18 +64,32 @@ class ProjectDetail extends React.Component {
       }
     });
     const chartData = [];
+    let totalCompleted = 0;
+    let totalCreated = 0;
     for (let day in totals) {
       chartData.push({
         weekDay: totals[day].weekFirst,
         weekNumber: day,
         completed: totals[day].completed,
         created: totals[day].created,
-      })
+      });
     }
     chartData.sort((a, b) => {
       return a.weekNumber - b.weekNumber
     })
-    return chartData.slice(currentWeekOfYear - 6, currentWeekOfYear + 6);
+    const slicedChartData = chartData.slice(currentWeekOfYear - 6, currentWeekOfYear + 6);
+
+    for (const data in slicedChartData) {
+      totalCompleted = totalCompleted + slicedChartData[data].completed;
+      totalCreated = totalCreated + slicedChartData[data].created;
+    }
+
+    this.setState({
+      totalCompleted: totalCompleted,
+      totalPending: totalCreated - totalCompleted
+    });
+
+    return slicedChartData;
   }
 
   render(){
@@ -87,9 +104,15 @@ class ProjectDetail extends React.Component {
           projectTasks={this.state.projectData.tasks}
           />
         <div className= "statistics__charts">
+          <div>
           <ProjectBurndownChart
            data={this.state.projectTasks}
            />
+           <LegendProjectDetail
+            totalCompleted={this.state.totalCompleted}
+            totalPending={this.state.totalPending}
+            />
+            </div>
             <div className= "chart__project--top-contributors">
               <div className= "top-contributors__chart">
                 <p className= "top-contributors__title">Top contributors</p>

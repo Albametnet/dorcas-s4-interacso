@@ -48,7 +48,11 @@
 
 .day__container {
   background-color: #17517f;
-  padding: 25px; }
+  padding: 25px;
+  box-sizing: border-box; }
+
+.day__container--today {
+  border: 10px solid #3dcef0; }
 
 .day__container--with-event {
   border-bottom: solid 10px #31cef2; }
@@ -59,6 +63,9 @@
   display: inline-block;
   vertical-align: bottom;
   overflow: auto; }
+
+.day__label--today {
+  color: #3dcef0; }
 
 .day__notifications-deadline--completed {
   color: #7f7f7f; }
@@ -369,6 +376,17 @@
 .top-contributors__list--commits {
   padding-right: 40px;
   text-align: right; }
+
+.chart__project--legend--completed {
+  color: #f5a623; }
+
+.chart__project--legend--pending {
+  color: #3dcef0; }
+
+.chart__project--legend {
+  position: relative;
+  top: -500px;
+  left: 50px; }
 
 .footer__container {
   display: grid;

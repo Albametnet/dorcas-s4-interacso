@@ -1,14 +1,96 @@
-import React from "react";
-import Header from "./Header";
+import React from 'react';
+import moment from 'moment'
+import Header from './Header';
+import ProjectsDetailStatusBar from './ProjectDetailStatusBar';
+import ProjectBurndownChart from './ProjectBurndownChart';
+import LegendProjectDetail from './LegendProjectDetail';
 import ProjectTopContributors from "./ProjectTopContributors";
-import Notifications from "./Notifications";
+import Notifications from './Notifications';
 
 class ProjectDetail extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props){
+    super(props)
     this.texts = {
-      title: "Proyectos > IKEA JD"
-    };
+      title: `Proyectos > ${this.props.projectName}`
+    }
+    this.state = {
+      projectData: {
+        hours: "",
+        commits: "",
+        tasks: "",
+        contributors: "",
+        totalCompleted: 0,
+        totalPending: 0
+      },
+      projectTasks: []
+    }
+  this.generateChartData= this.generateChartData.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.retrieveFromApi(`projects/${this.props.projectId}`).then(apiResponse => {
+      this.setState({
+        projectData: apiResponse
+      });
+    });
+    this.props.retrieveFromApi(`projects/${this.props.projectId}/tasks`).then(apiResponse => {
+      if (apiResponse.data != undefined) {
+        const generatedData = this.generateChartData(apiResponse.data);
+        this.setState({
+          projectTasks: generatedData
+        });
+      }
+
+    });
+  }
+
+  generateChartData(tasks) {
+    const totals = {};
+    const currentWeekOfYear = moment().isoWeek();
+    const currentYear = moment().year();
+    for (let week = 1; week <= 52; week++) {
+      totals[week] = {
+        created: 0,
+        completed: 0,
+        weekFirst: moment(currentYear).add(week - 1, 'weeks').format("MMM D")
+      }
+    }
+
+    tasks.forEach(task => {
+      const taskYear = moment(task.created_at).year();
+      const weekOfYear = moment(task.created_at).isoWeek();
+      totals[weekOfYear].created = totals[weekOfYear].created + 1;
+      if (task.completed){
+        totals[weekOfYear].completed = totals[weekOfYear].completed + 1;
+      }
+    });
+    const chartData = [];
+    let totalCompleted = 0;
+    let totalCreated = 0;
+    for (let day in totals) {
+      chartData.push({
+        weekDay: totals[day].weekFirst,
+        weekNumber: day,
+        completed: totals[day].completed,
+        created: totals[day].created,
+      });
+    }
+    chartData.sort((a, b) => {
+      return a.weekNumber - b.weekNumber
+    })
+    const slicedChartData = chartData.slice(currentWeekOfYear - 6, currentWeekOfYear + 6);
+
+    for (const data in slicedChartData) {
+      totalCompleted = totalCompleted + slicedChartData[data].completed;
+      totalCreated = totalCreated + slicedChartData[data].created;
+    }
+
+    this.setState({
+      totalCompleted: totalCompleted,
+      totalPending: totalCreated - totalCompleted
+    });
+
+    return slicedChartData;
   }
 
   componentDidMount() {
@@ -19,59 +101,34 @@ class ProjectDetail extends React.Component {
 
   render() {
     return (
-      <div className="detailedprojects__container databoard">
-        <Header title={this.texts.title} />
-        <div className="detailedprojects__content">
-          <div className="detailed-projects__statistics--container">
-            <div className="statistics__data project__progress">
-              <div className="project-progress__percentage">
-                <div className="data__number">
-                  <p>55%</p>
-                </div>
-                <div className="data__tags">
-                  <p>progreso</p>
-                </div>
-              </div>
-              <div className="project-progress__integer">
-                <p className="progress__integer--completed">550/1000</p>
-              </div>
+      <div className= "detailedprojects__container databoard">
+        <Header title= {this.texts.title} />
+        <div className= "detailedprojects__content">
+          <ProjectsDetailStatusBar
+          projectId={this.props.projectId}
+          projectHours={this.state.projectData.hours}
+          projectCommits={this.state.projectData.commits}
+          projectTasks={this.state.projectData.tasks}
+          />
+        <div className= "statistics__charts">
+          <div>
+          <ProjectBurndownChart
+           data={this.state.projectTasks}
+           />
+           <LegendProjectDetail
+            totalCompleted={this.state.totalCompleted}
+            totalPending={this.state.totalPending}
+            />
             </div>
-            <div className="statistics__data project__hours">
-              <div className="data__number">
-                <p>2500</p>
-              </div>
-              <div className="data__tags">
-                <p>horas</p>
-              </div>
-            </div>
-            <div className="statistics__data project__hours--week">
-              <div className="data__number">
-                <p>50</p>
-              </div>
-              <div className="data__tags">
-                <p>horas semana</p>
-              </div>
-            </div>
-            <div className="statistics__data project__commits">
-              <div className="data__number">
-                <p>1800</p>
-              </div>
-              <div className="data__tags">
-                <p>commits</p>
-              </div>
-            </div>
-          </div>
-          <div className="statistics__charts">
-            <div className="chart__project--completed-tasks" />
             <ProjectTopContributors
               projectsdata={this.props.projectsdata}
               topContributors={this.props.topContributors}
               updateState={this.props.updateState}
               retrieveFromApi={this.props.retrieveFromApi}
             />
-          </div>
         </div>
         <Notifications />
+      </div>
       </div>
     );
   }

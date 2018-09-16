@@ -5,9 +5,10 @@ import Env from "../data/.env.json";
 class Notifications extends React.Component {
   constructor(props) {
     super(props);
+
     this.state= {
       notifNumber: []
-    };
+    }
   }
 
   componentDiDMount () {
@@ -31,7 +32,7 @@ class Notifications extends React.Component {
         return response.json();
       })
       .then((json) => {
-      this.setState ({
+        this.setState ({
           notifNumber: json.data
         });
       });

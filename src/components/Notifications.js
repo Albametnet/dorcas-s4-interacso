@@ -31,16 +31,8 @@ class Notifications extends React.Component {
         return response.json();
       })
       .then((json) => {
-        return json;
-        let howManyNotif = [];
-        //
-        // for (let i = 0; i < json.length; i++) {
-        //   if (true) {
-        //     return
-        //   } else {
-        //     return
-        //   }
-        // }
+        let howManyNotif = json.data;
+
         this.setState ({
           notifNumber: howManyNotif
         });

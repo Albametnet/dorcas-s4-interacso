@@ -6,7 +6,7 @@ class Notifications extends React.Component {
   constructor(props) {
     super(props);
     this.state= {
-      notifNumber: 0
+      notifNumber: []
     };
   }
 
@@ -31,8 +31,9 @@ class Notifications extends React.Component {
         return response.json();
       })
       .then((json) => {
-        let howManyNotif = json.data.length
-
+        return json;
+        let howManyNotif = [];
+        //
         // for (let i = 0; i < json.length; i++) {
         //   if (true) {
         //     return

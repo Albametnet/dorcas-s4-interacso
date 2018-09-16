@@ -31,10 +31,10 @@ class Notifications extends React.Component {
         return response.json();
       })
       .then((json) => {
-        let howManyNotif = json.data;
+        return json;
 
         this.setState ({
-          notifNumber: howManyNotif
+          notifNumber: json.data[0]
         });
       });
   }

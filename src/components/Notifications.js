@@ -1,11 +1,55 @@
 import React from "react";
 import bell from "../images/bell.svg";
+import Env from "../data/.env.json";
 
 class Notifications extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state= {
+      notifNumber: 0
+    };
+  }
+
+  componentDiDMount () {
+    this.callNotifFromApi();
+  }
+
+  callNotifFromApi() {
+    fetch(
+      "https://databoards-api.interacso.com/notifications",
+      {
+        method: 'get',
+        withCredentials: true,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Authorization': Env.token,
+          'Content-Type': 'application/json'
+        }
+      }
+    )
+      .then((response) => {
+        return response.json();
+      })
+      .then((json) => {
+        let howManyNotif = json.data.length
+
+        // for (let i = 0; i < json.length; i++) {
+        //   if (true) {
+        //     return
+        //   } else {
+        //     return
+        //   }
+        // }
+        this.setState ({
+          notifNumber: howManyNotif
+        });
+      });
+  }
+
   render() {
     return (
       <div className= "footer__container">
-        <div className= "footer__notif--number">NOTIFICACIONES (3)</div>
+        <div className= "footer__notif--number">NOTIFICACIONES ({this.state.notifNumber})</div>
         <div className= "footer__notif-details">
           <div className= "detail__notif--category">
             <div className= "footer__bell">

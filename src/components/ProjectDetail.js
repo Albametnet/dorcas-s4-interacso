@@ -93,11 +93,23 @@ class ProjectDetail extends React.Component {
     return slicedChartData;
   }
 
-  componentDidMount() {
-    this.props.retrieveFromApi("projects").then(apiResponse => {
-      this.props.updateState({projectsdata: apiResponse.data[0]})
-    });
-  }
+    // getContributors (){
+    //   fetch (apiList)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+    //     let contributorsName = [];
+    //     for (let i=0; i < data.length; i ++) {
+    //       contributorsName[i]= {
+    //         ...data[i],
+    //         id: i
+    //       }
+    //     }
+    //     this.setState({
+    //       myCharacter: characterID
+    //     });
+    //   });
+  
+    // }
 
   render() {
     return (

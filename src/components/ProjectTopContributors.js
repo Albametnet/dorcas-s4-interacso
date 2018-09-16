@@ -7,12 +7,21 @@ class ProjectTopContributors extends React.Component {
   
   componentDidMount() {
     this.props.retrieveFromApi("projects/650687808730806").then(apiResponse => {
+      // apiResponse.contributors.sort(function (a, b){
+      //   return (b.commits - a.commits)
+      // });
       this.props.updateState({topContributors: apiResponse.contributors[0]})
     });
   }
 
   render(){
-    let contributors= this.props.topContributors;
+    let contributors = this.props.topContributors;
+
+    // console.log("contributors="+contributors[0]);
+    // let json = JSON.stringify(contributors[0]);
+    // console.log("render="+json);
+    // let ojbJson = JSON.parse(contributors);
+    // console.log("render="+ojbJson);  
     let contributorsName = [];
     let contributorsCommits = [];
     return (
@@ -23,8 +32,8 @@ class ProjectTopContributors extends React.Component {
                   <li className= "top-contributors__list--element">
                     <p className= "top-contributors__list--number">#1</p>
                     <p className= "top-contributors__list--name">{contributors.name}</p>
-                    <p className= "top-contributors__list--commits">250</p>
-                    </li>
+                    <p className= "top-contributors__list--commits"></p>
+                    </li> 
                   <li className= "top-contributors__list--element">#2</li>
                   <li className= "top-contributors__list--element">#3</li>
                   <li className= "top-contributors__list--element">#4</li>

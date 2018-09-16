@@ -9,10 +9,10 @@ import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.apiService= 'https://databoards-api.interacso.com/';
-    this.state= {
+    this.apiService = 'https://databoards-api.interacso.com/';
+    this.state = {
       currentDataboard: 0,
       currentTransition: "0.5s",
       currentSlideLeft: "0",
@@ -40,7 +40,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
+    this.effect = setInterval(this.showNextDashboard, 3000);
     this.retrieveFromApi("projects/list").then(apiResponse => {
       this.setState({
         totalDataboards: this.state.totalDataboards + apiResponse.total,
@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   retrieveFromApi(endpoint) {
-    if(typeof Env !== "undefined" & Env.token !== "undefined") {
+    if (typeof Env !== "undefined" & Env.token !== "undefined") {
       return fetch(
         this.apiService + endpoint,
         {
@@ -68,7 +68,7 @@ class App extends Component {
           }
         }
       ).then(response => {
-        if(response.status === 401){
+        if (response.status === 401) {
           throw Error(response.statusText);
         } else {
           return response.json();
@@ -87,7 +87,7 @@ class App extends Component {
   }
 
 
-  showNextDashboard(){
+  showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {
       clearInterval(this.effect);
       this.setState({
@@ -96,13 +96,13 @@ class App extends Component {
         currentTransition: "none"
       });
 
-      this.effect= setInterval(this.showNextDashboard, 3000);
+      this.effect = setInterval(this.showNextDashboard, 3000);
 
     } else {
       this.setState({
         currentDataboard: this.state.currentDataboard + 1,
       });
-      const newSlide= this.state.currentDataboard * -100;
+      const newSlide = this.state.currentDataboard * -100;
       this.setState({
         currentSlideLeft: `${newSlide}%`,
         currentTransition: "0.5s"
@@ -111,19 +111,19 @@ class App extends Component {
   }
 
   render() {
-    const sliderStyles= {
+    const sliderStyles = {
       left: this.state.currentSlideLeft,
       transition: this.state.currentTransition
     }
     return (
-      <div className= "visor" style={sliderStyles}>
+      <div className="visor" style={sliderStyles}>
 
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
-         />
-        <Projects projectsdata= {this.state.projectsdata}
+        />
+        <Projects projectsdata={this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
           updateState={this.updateState}
@@ -139,7 +139,7 @@ class App extends Component {
             retrieveFromApi={this.retrieveFromApi}
             projectId={project.gid}
             projectName={project.name}
-            />
+          />
         )}
 
         <Team weekChartData={this.state.weekChartData}
@@ -155,7 +155,7 @@ class App extends Component {
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
-         />
+        />
       </div>
     );
   }

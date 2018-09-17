@@ -105,7 +105,7 @@ componentDidMount() {
             <p className= "killer__detail">Commits esta semana</p>
           </div>
         </div>
-        <Notifications />
+        <Notifications notifications={this.props.notifications} />
       </div>
     );
   }

@@ -32,19 +32,32 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 3000
+      refreshTime: 30000000,
+      notificationsRefreshTime: 40000, //buscar 24 horas en milisegundos
+      notifications: [],
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.loadNotifications = this.loadNotifications.bind(this);
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime)
+    //this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    this.loadNotifications();
+    this.notificationEffect = setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
     this.retrieveFromApi("projects/list").then(apiResponse => {
       this.setState({
         totalDataboards: this.state.totalDataboards + apiResponse.total,
         projects: apiResponse.data
+      });
+    });
+  }
+
+  loadNotifications() {
+    this.retrieveFromApi('notifications').then(apiResponse => {
+      this.setState({
+        notifications: apiResponse.data
       });
     });
   }
@@ -119,14 +132,15 @@ class App extends Component {
     return (
       <div className="visor" style={sliderStyles}>
 
+      <Projects projectsdata={this.state.projectsdata}
+        projectsCharts={this.state.projectsCharts}
+        hoursCharts={this.state.hoursCharts}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+        notifications={this.state.notifications}
+      />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
-        <Projects projectsdata={this.state.projectsdata}
-          projectsCharts={this.state.projectsCharts}
-          hoursCharts={this.state.hoursCharts}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
@@ -139,6 +153,7 @@ class App extends Component {
             retrieveFromApi={this.retrieveFromApi}
             projectId={project.gid}
             projectName={project.name}
+            notifications={this.state.notifications}
           />
         )}
 
@@ -150,6 +165,7 @@ class App extends Component {
           averageCommits={this.state.averageCommits}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
+          notifications={this.state.notifications}
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}

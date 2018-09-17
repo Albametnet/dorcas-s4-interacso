@@ -32,7 +32,7 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 30000000,
+      refreshTime: 15000,
       notificationsRefreshTime: 40000, //buscar 24 horas en milisegundos
       notifications: [],
     }
@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
     this.loadNotifications();
     this.notificationEffect = setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
     this.retrieveFromApi("projects/list").then(apiResponse => {

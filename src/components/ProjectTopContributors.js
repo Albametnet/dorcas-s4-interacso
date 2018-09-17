@@ -38,15 +38,14 @@ class ProjectTopContributors extends React.Component {
             <ul className="top-contributors__list">
               {this.props.contributors.map((contributor, index) =>
                 <li className="top-contributors__list--element">
-                  <span className="top-contributors__list--commits">
-                    `#${index+1}`
-                  </span>
-                  <span className="top-contributors__list--commits">
-                    {contributor.name}
+                  <span className="top-contributors__list--number">
+                    <span>#{index+1}</span>
+                    <span className="top-contributors__list--name">{contributor.name}</span>
                   </span>
                   <span className="top-contributors__list--commits">
                     {contributor.commits}
                   </span>
+
                 </li>
               )}
             </ul>

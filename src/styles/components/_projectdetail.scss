@@ -63,16 +63,9 @@
   border-bottom: 1px solid $chartTasks;
   display: flex;
   flex-direction: row;
-}
-.top-contributors__list--name{
-  padding-left: 40px;
-  display: flex;
   justify-content: space-between;
 }
-.top-contributors__list--commits{
-  padding-right: 40px;
-  text-align: right;
-}
+
 .chart__project--legend--completed {
   color: $statisticsDataTotalHours;
 }
@@ -84,4 +77,8 @@
   position: relative;
   top: -500px;
   left: 50px;
+}
+
+.top-contributors__list--name{
+  margin-left: 15px;
 }

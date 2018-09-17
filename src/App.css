@@ -368,16 +368,8 @@
   padding: 15.5px;
   border-bottom: 1px solid #17517f;
   display: flex;
-  flex-direction: row; }
-
-.top-contributors__list--name {
-  padding-left: 40px;
-  display: flex;
+  flex-direction: row;
   justify-content: space-between; }
-
-.top-contributors__list--commits {
-  padding-right: 40px;
-  text-align: right; }
 
 .chart__project--legend--completed {
   color: #f5a623; }
@@ -389,6 +381,9 @@
   position: relative;
   top: -500px;
   left: 50px; }
+
+.top-contributors__list--name {
+  margin-left: 15px; }
 
 .footer__container {
   display: grid;

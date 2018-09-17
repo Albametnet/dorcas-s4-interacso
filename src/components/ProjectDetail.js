@@ -18,10 +18,9 @@ class ProjectDetail extends React.Component {
         hours: "",
         commits: "",
         tasks: "",
-        contributors: "",
+        contributors: [],
         totalCompleted: 0,
         totalPending: 0,
-        topContributors: []
       },
       projectTasks: []
     };
@@ -123,7 +122,7 @@ class ProjectDetail extends React.Component {
             </div>
 
             <ProjectTopContributors
-              topContributors={this.state.projectData.contributors}
+              contributors={this.state.projectData.contributors}
               projectId={this.props.projectId}
               projectsdata={this.props.projectsdata}
               updateState={this.props.updateState}

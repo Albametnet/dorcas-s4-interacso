@@ -3,6 +3,7 @@ import React from "react";
 class ProjectTopContributors extends React.Component {
   constructor(props) {
     super(props);
+    console.log(props.projectData);
   }
 
   // getContributors() {
@@ -27,29 +28,27 @@ class ProjectTopContributors extends React.Component {
     // let ojbJson = JSON.parse(contributors);
     // console.log("render="+ojbJson);
     // let contributorsName = [];
+    console.log(this.props.contributors);
     // let contributorsCommits = [];
     return (
       <div className="chart__project--top-contributors">
         <div className="top-contributors__chart">
           <p className="top-contributors__title">Top contributors</p>
           <div className="top-contributors__list">
-            <ul className="top-contributors__list--number">
-              <li className="top-contributors__list--element">#1</li>
-              <li className="top-contributors__list--element">#2</li>
-              <li className="top-contributors__list--element">#3</li>
-              <li className="top-contributors__list--element">#4</li>
-              <li className="top-contributors__list--element">#5</li>
-              <li className="top-contributors__list--element">#6</li>
-            </ul>
             <ul className="top-contributors__list">
-              {this.props.contributors.map(contributor => {
-                <li className="top-contributors__list--name">
-                  {contributor.name}
-                  <p className="top-contributors__list--commits">
+              {this.props.contributors.map((contributor, index) =>
+                <li className="top-contributors__list--element">
+                  <span className="top-contributors__list--commits">
+                    `#${index+1}`
+                  </span>
+                  <span className="top-contributors__list--commits">
+                    {contributor.name}
+                  </span>
+                  <span className="top-contributors__list--commits">
                     {contributor.commits}
-                  </p>
-                </li>;
-              })}
+                  </span>
+                </li>
+              )}
             </ul>
           </div>
         </div>

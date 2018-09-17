@@ -46,7 +46,6 @@ class App extends Component {
         projects: apiResponse.data
       });
     });
-
   }
 
   updateState(object) {
@@ -95,7 +94,7 @@ class App extends Component {
         currentTransition: "none"
       });
 
-      this.effect= setInterval(this.showNextDashboard, 3000);
+      this.effect= setInterval(this.showNextDashboard, 15000);
 
     } else {
       this.setState({

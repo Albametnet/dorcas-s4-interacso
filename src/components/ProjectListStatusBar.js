@@ -1,5 +1,4 @@
 import React from "react";
-import Env from "../data/.env.json";
 
 class ProjectListStatusBar extends React.Component {
   constructor(props){

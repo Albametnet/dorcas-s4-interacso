@@ -61,8 +61,30 @@
   font-size: 25px;
   color: #31cef2;
   display: inline-block;
-  vertical-align: bottom;
-  overflow: auto; }
+  vertical-align: bottom; }
+
+.notifications__container--events {
+  height: 50px; }
+
+.notifications__container--deadlines {
+  height: 50px; }
+
+.day__notifications-event {
+  display: inline-block;
+  opacity: 1;
+  transition: opacity 0.5s; }
+
+.day__notifications-deadline {
+  display: inline-block;
+  opacity: 1;
+  transition: opacity 0.5s; }
+
+.opacity-off {
+  opacity: 0;
+  transition: opacity 0.5s; }
+
+.display-off {
+  display: none; }
 
 .day__label--today {
   color: #3dcef0; }
@@ -84,7 +106,9 @@
   height: 18px;
   display: inline-block;
   border-radius: 50%;
-  margin-right: 10px; }
+  margin-right: 10px;
+  opacity: 1;
+  transition: opacity 0.5s; }
 
 .deadline__point--completed {
   background-color: #7f7f7f; }

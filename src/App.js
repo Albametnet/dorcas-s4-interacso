@@ -32,7 +32,6 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      topContributors: []
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -134,7 +133,6 @@ class App extends Component {
           <ProjectDetail projectHours={this.state.projectHours}
             projectCommits={this.state.projectCommits}
             projectTasks={this.state.projectTasks}
-            topContributors={this.state.topContributors}
             updateState={this.updateState}
             retrieveFromApi={this.retrieveFromApi}
             projectId={project.gid}

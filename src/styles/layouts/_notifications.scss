@@ -5,6 +5,8 @@
   color: $titles;
   font-family: $montserrat, $sansSe;
   height: 70px;
+  position: absolute;
+  bottom: 0;
 }
 .footer__notif-details {
   display: grid;

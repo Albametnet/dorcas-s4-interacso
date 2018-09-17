@@ -123,10 +123,6 @@ class ProjectDetail extends React.Component {
 
             <ProjectTopContributors
               contributors={this.state.projectData.contributors}
-              projectId={this.props.projectId}
-              projectsdata={this.props.projectsdata}
-              updateState={this.props.updateState}
-              retrieveFromApi={this.props.retrieveFromApi}
             />
           </div>
           <Notifications />

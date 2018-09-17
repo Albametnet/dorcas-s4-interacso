@@ -6,7 +6,7 @@ class TableCalendar extends React.Component {
     this.milisecondsInADay= 86400000;
     this.calendarContainer = React.createRef();
     if (
-      typeof this.props.datesToPrint !== 'undefined' &&
+      typeof this.props.datesToPrint !== undefined &&
       this.props.datesToPrint.length === 0
     ) {
       this.getCalendarDates(this.props.datesToPrint);
@@ -15,12 +15,15 @@ class TableCalendar extends React.Component {
   }
 
   componentDidMount() {
-    this.props.retrieveFromApi('calendar').then(apiResponse => {
-      if (this.props.calendarLoaded === false) {
-        this.setDatesNotifications(apiResponse.data);
-        this.props.updateState({calendarLoaded: true});
+    if (this.props.calendarLoaded === false) {
+      this.compareJson();
       }
-    });
+    // this.props.retrieveFromApi('calendar').then(apiResponse => {
+    //   if (this.props.calendarLoaded === false) {
+    //     this.setDatesNotifications(apiResponse.data);
+    //     this.props.updateState({calendarLoaded: true});
+    //   }
+    // });
   }
 componentDidUpdate() {
   const withEvents =  this.calendarContainer.current.querySelectorAll('.day__container--with-event');
@@ -232,8 +235,18 @@ fadeOut(element, time) {
     const startDate= new Date(miliseconds);
     return startDate;
   }
-
+compareJson() {
+  if(this.props.jsonCalendar !== ""){
+    console.log("tengo datos");
+    this.setDatesNotifications(this.props.jsonCalendar.data);
+    this.props.updateState({calendarLoaded: true});
+  } else {
+    console.log("Estoy sin datos");
+  }
+}
   render() {
+
+
     return (
       <React.Fragment>
         {this.makeCalendarStructure()}

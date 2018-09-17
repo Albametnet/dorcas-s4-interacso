@@ -13,6 +13,7 @@ class App extends Component {
     super(props);
     this.apiService= 'https://databoards-api.interacso.com/';
     this.state= {
+      jsonCalendar: "",
       currentDataboard: 0,
       currentTransition: "0.5s",
       currentSlideLeft: "0",
@@ -38,17 +39,17 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 15000);
+    //this.effect= setInterval(this.showNextDashboard, 15000);
+    this.calendarApi();
   }
 
   updateState(object) {
     this.setState(object);
   }
-
-  retrieveFromApi(endpoint) {
+  calendarApi() {
     if(typeof Env !== "undefined" & Env.token !== "undefined") {
-      return fetch(
-        this.apiService + endpoint,
+      fetch(
+        this.apiService + "calendar",
         {
           method: 'get',
           withCredentials: true,
@@ -65,82 +66,117 @@ class App extends Component {
           return response.json();
         }
       }
-      ).then(json => {
-        return json;
-      }).catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
-      });
-    } else {
-      alert("No está usted autorizado");
-      return null;
-    }
-  }
-
-  showNextDashboard(){
-    if (this.state.currentDataboard == this.state.totalDataboards - 1) {
-      clearInterval(this.effect);
+    ).then(json => {
       this.setState({
-        currentDataboard: 0,
-        currentSlideLeft: "0",
-        currentTransition: "none"
-      });
-
-      this.effect= setInterval(this.showNextDashboard, 15000);
-
-    } else {
-      this.setState({
-        currentDataboard: this.state.currentDataboard + 1,
-      });
-      const newSlide= this.state.currentDataboard * -100;
-      this.setState({
-        currentSlideLeft: `${newSlide}%`,
-        currentTransition: "0.5s"
+        jsonCalendar: json
       })
-    }
+    }).catch(error => {
+      alert("El token es incorrecto");
+      console.error(error);
+    });
+  } else {
+    alert("No está usted autorizado");
+    return null;
   }
+}
 
-  render() {
-    const sliderStyles= {
-      left: this.state.currentSlideLeft,
-      transition: this.state.currentTransition
+retrieveFromApi(endpoint) {
+  if(typeof Env !== "undefined" & Env.token !== "undefined") {
+    return fetch(
+      this.apiService + endpoint,
+      {
+        method: 'get',
+        withCredentials: true,
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Authorization': Env.token,
+          'Content-Type': 'application/json'
+        }
+      }
+    ).then(response => {
+      if(response.status === 401){
+        throw Error(response.statusText);
+      } else {
+        return response.json();
+      }
     }
-    return (
-      <div className= "visor" style={sliderStyles}>
-        <Calendar datesToPrint={this.state.datesToPrint}
-          calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-         />
-        <Projects projectsdata= {this.state.projectsdata}
-          projectsCharts={this.state.projectsCharts}
-          hoursCharts={this.state.hoursCharts}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
-        <ProjectDetail projectHours={this.state.projectHours}
-          projectCommits={this.state.projectCommits}
-          projectTasks={this.state.projectTasks}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-          />
-        <Team weekChartData={this.state.weekChartData}
-          memberPics={this.state.memberPics}
-          tasksWinner={this.state.tasksWinner}
-          commitsWinner={this.state.commitsWinner}
-          averageTask={this.state.averageTask}
-          averageCommits={this.state.averageCommits}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
-        <Calendar datesToPrint={this.state.datesToPrint}
-          calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-         />
-      </div>
-    );
+  ).then(json => {
+    return json;
+  }).catch(error => {
+    alert("El token es incorrecto");
+    console.error(error);
+  });
+} else {
+  alert("No está usted autorizado");
+  return null;
+}
+}
+
+showNextDashboard(){
+  if (this.state.currentDataboard == this.state.totalDataboards - 1) {
+    clearInterval(this.effect);
+    this.setState({
+      currentDataboard: 0,
+      currentSlideLeft: "0",
+      currentTransition: "none"
+    });
+
+    this.effect= setInterval(this.showNextDashboard, 15000);
+
+  } else {
+    this.setState({
+      currentDataboard: this.state.currentDataboard + 1,
+    });
+    const newSlide= this.state.currentDataboard * -100;
+    this.setState({
+      currentSlideLeft: `${newSlide}%`,
+      currentTransition: "0.5s"
+    })
   }
+}
+
+render() {
+  const sliderStyles= {
+    left: this.state.currentSlideLeft,
+    transition: this.state.currentTransition
+  }
+  return (
+    <div className= "visor" style={sliderStyles}>
+      <Calendar datesToPrint={this.state.datesToPrint}
+        calendarLoaded={this.state.calendarLoaded}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+        jsonCalendar={this.state.jsonCalendar}
+      />
+      <Projects projectsdata= {this.state.projectsdata}
+        projectsCharts={this.state.projectsCharts}
+        hoursCharts={this.state.hoursCharts}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+      />
+      <ProjectDetail projectHours={this.state.projectHours}
+        projectCommits={this.state.projectCommits}
+        projectTasks={this.state.projectTasks}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+      />
+      <Team weekChartData={this.state.weekChartData}
+        memberPics={this.state.memberPics}
+        tasksWinner={this.state.tasksWinner}
+        commitsWinner={this.state.commitsWinner}
+        averageTask={this.state.averageTask}
+        averageCommits={this.state.averageCommits}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+      />
+      <Calendar datesToPrint={this.state.datesToPrint}
+        calendarLoaded={this.state.calendarLoaded}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+      />
+    </div>
+  );
+}
 }
 
 export default App;

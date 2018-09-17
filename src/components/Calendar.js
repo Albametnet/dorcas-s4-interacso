@@ -18,6 +18,7 @@ class Calendar extends React.Component {
           calendarLoaded={this.props.calendarLoaded}
           updateState={this.props.updateState}
           retrieveFromApi = {this.props.retrieveFromApi}
+          jsonCalendar={this.props.jsonCalendar}
         />
       </div>
     );

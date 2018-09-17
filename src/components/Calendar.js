@@ -14,6 +14,7 @@ class Calendar extends React.Component {
       <div className= "databoard">
         <Header title= {this.texts.title}/>
         <TableCalendar
+          identifier={this.props.identifier}
           datesToPrint={this.props.datesToPrint}
           calendarLoaded={this.props.calendarLoaded}
           caledarResponseApi={this.props.caledarResponseApi}

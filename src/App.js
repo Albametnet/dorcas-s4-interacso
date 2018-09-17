@@ -11,7 +11,6 @@ import 'devextreme/dist/css/dx.light.compact.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.fetchsLaunched = false;
     this.apiService = 'https://databoards-api.interacso.com/';
     this.state = {
       currentDataboard: 0,
@@ -43,30 +42,22 @@ class App extends Component {
 
   componentDidMount() {
     // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
-    if (this.fetchsLaunched === false) {
-      const promises = [];
-      const promiseProjectList = this.retrieveFromApi("projects/list");
-      const promiseCalendar = this.retrieveFromApi("calendar");
-      promises.push(promiseCalendar);
-      promises.push(promiseProjectList);
-      Promise.all(promises).then(([calendarJson, projectListJson]) => {
-        if (typeof calendarJson !== "undefined") {
-          console.log('guardo');
-          this.setState({
-            caledarResponseApi: calendarJson
-          })
-        } else {
-          console.log('no guarda');
-        }
-        if (typeof projectListJson !== "undefined") {
-          this.setState({
-            totalDataboards: this.state.totalDataboards + projectListJson.total,
-            projects: projectListJson.data
-          });
-        }
-      });
-      this.fetchsLaunched = true;
-    }
+    this.retrieveFromApi("projects/list").then(projectListJson => {
+      if (typeof projectListJson !== "undefined") {
+        this.setState({
+          totalDataboards: this.state.totalDataboards + projectListJson.total,
+          projects: projectListJson.data
+        });
+      }
+    });
+    this.retrieveFromApi("calendar").then(calendarJson => {
+      if (typeof calendarJson !== "undefined") {
+        console.log('guardo');
+        this.setState({
+          caledarResponseApi: calendarJson
+        })
+      }
+    });
   }
 
   updateState(object) {
@@ -139,7 +130,9 @@ class App extends Component {
     return (
       <div className="visor" style={sliderStyles}>
 
-        <Calendar datesToPrint={this.state.datesToPrint}
+        <Calendar
+          identifier="1"
+          datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           caledarResponseApi={this.state.caledarResponseApi}
           updateState={this.updateState}
@@ -172,7 +165,9 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        <Calendar datesToPrint={this.state.datesToPrint}
+        <Calendar
+          identifier="2"
+          datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           caledarResponseApi={this.state.caledarResponseApi}
           updateState={this.updateState}

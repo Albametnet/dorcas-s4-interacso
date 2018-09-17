@@ -14,15 +14,15 @@ class TableCalendar extends React.Component {
     this.setDatesNotifications = this.setDatesNotifications.bind(this);
   }
 
-  componentWillUpdate() {
-    if (this.props.calendarLoaded === false &&
-      typeof this.props.caledarResponseApi.data !== "undefined"
-    ) {
-      this.setDatesNotifications();
-      this.props.updateState({calendarLoaded: true});
-    }
-  }
 componentDidUpdate() {
+  console.log('soy ' + this.props.identifier);
+  console.log(this.props.calendarLoaded, this.props.caledarResponseApi);
+  if (this.props.calendarLoaded === false &&
+    typeof this.props.caledarResponseApi.data !== "undefined"
+  ) {
+    this.setDatesNotifications();
+    this.props.updateState({calendarLoaded: true});
+  }
   const withEvents =  this.calendarContainer.current.querySelectorAll('.day__container--with-event');
   withEvents.forEach(withEvent => {
     const notificationEvents = withEvent.querySelectorAll('.day__notifications-event');

@@ -2,7 +2,6 @@ import React from "react";
 import Header from "./Header";
 import ProjectListStatusBar from "./ProjectListStatusBar";
 import Notifications from "./Notifications";
-import Env from "../data/.env.json";
 import MostCommitsChart from "./MostCommitsChart";
 import MostHoursChart from "./MostHoursChart";
 

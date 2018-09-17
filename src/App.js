@@ -38,7 +38,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, 3000);
+    this.effect= setInterval(this.showNextDashboard, 15000);
   }
 
   updateState(object) {
@@ -86,7 +86,7 @@ class App extends Component {
         currentTransition: "none"
       });
 
-      this.effect= setInterval(this.showNextDashboard, 3000);
+      this.effect= setInterval(this.showNextDashboard, 15000);
 
     } else {
       this.setState({
@@ -109,7 +109,7 @@ class App extends Component {
       <div className= "visor" style={sliderStyles}>
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}           
+          updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
          />
         <Projects projectsdata= {this.state.projectsdata}
@@ -130,7 +130,7 @@ class App extends Component {
           commitsWinner={this.state.commitsWinner}
           averageTask={this.state.averageTask}
           averageCommits={this.state.averageCommits}
-          updateState={this.updateState}           
+          updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
         <Calendar datesToPrint={this.state.datesToPrint}

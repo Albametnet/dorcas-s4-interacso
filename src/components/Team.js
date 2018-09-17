@@ -4,8 +4,7 @@ import WeekTasksChart from './WeekTasksChart';
 import WeekCommitsChart from './WeekCommitsChart';
 import TeamStatusBar from './TeamStatusBar';
 import Notifications from './Notifications';
-import '../App.css'
-import Env from '../data/.env.json';
+import '../App.css';
 
 class Team extends React.Component {
   constructor(props) {

@@ -93,24 +93,6 @@ class ProjectDetail extends React.Component {
     return slicedChartData;
   }
 
-    // getContributors (){
-    //   fetch (apiList)
-    //   .then((response) => response.json())
-    //   .then((data) => {
-    //     let contributorsName = [];
-    //     for (let i=0; i < data.length; i ++) {
-    //       contributorsName[i]= {
-    //         ...data[i],
-    //         id: i
-    //       }
-    //     }
-    //     this.setState({
-    //       myCharacter: characterID
-    //     });
-    //   });
-  
-    // }
-
   render() {
     return (
       <div className= "detailedprojects__container databoard">

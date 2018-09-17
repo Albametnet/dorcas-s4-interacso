@@ -66,6 +66,8 @@
 }
 .top-contributors__list--name{
   padding-left: 40px;
+  display: flex;
+  justify-content: space-between;
 }
 .top-contributors__list--commits{
   padding-right: 40px;

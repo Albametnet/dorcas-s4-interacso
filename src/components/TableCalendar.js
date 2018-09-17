@@ -14,13 +14,13 @@ class TableCalendar extends React.Component {
     this.setDatesNotifications = this.setDatesNotifications.bind(this);
   }
 
-  componentDidMount() {
-    this.props.retrieveFromApi('calendar').then(apiResponse => {
-      if (this.props.calendarLoaded === false) {
-        this.setDatesNotifications(apiResponse.data);
-        this.props.updateState({calendarLoaded: true});
-      }
-    });
+  componentWillUpdate() {
+    if (this.props.calendarLoaded === false &&
+      typeof this.props.caledarResponseApi.data !== "undefined"
+    ) {
+      this.setDatesNotifications();
+      this.props.updateState({calendarLoaded: true});
+    }
   }
 componentDidUpdate() {
   const withEvents =  this.calendarContainer.current.querySelectorAll('.day__container--with-event');
@@ -196,8 +196,9 @@ fadeOut(element, time) {
     return date.getFullYear() + '-' + month + '-' + day;
   }
 
-  setDatesNotifications(apiResponse) {
+  setDatesNotifications() {
     const datesToPrint = this.props.datesToPrint;
+    const apiResponse = this.props.caledarResponseApi.data;
     datesToPrint.forEach((dateToPrint, index) => {
       apiResponse.forEach(dayFromApi => {
         if (dayFromApi.datecalendar === dateToPrint.date) {

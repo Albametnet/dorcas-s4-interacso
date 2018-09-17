@@ -16,6 +16,7 @@ class Calendar extends React.Component {
         <TableCalendar
           datesToPrint={this.props.datesToPrint}
           calendarLoaded={this.props.calendarLoaded}
+          caledarResponseApi={this.props.caledarResponseApi}
           updateState={this.props.updateState}
           retrieveFromApi = {this.props.retrieveFromApi}
         />

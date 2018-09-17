@@ -11,6 +11,7 @@ import 'devextreme/dist/css/dx.light.compact.css';
 class App extends Component {
   constructor(props) {
     super(props);
+    this.fetchsLaunched = false;
     this.apiService = 'https://databoards-api.interacso.com/';
     this.state = {
       currentDataboard: 0,
@@ -18,6 +19,7 @@ class App extends Component {
       currentSlideLeft: "0",
       totalDataboards: 4,
       datesToPrint: [],
+      caledarResponseApi: [],
       calendarLoaded: false,
       projectsdata: [],
       projectsCharts: [],
@@ -32,7 +34,7 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 3000
+      refreshTime: 8000
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -40,13 +42,31 @@ class App extends Component {
   }
 
   componentDidMount() {
-    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime)
-    this.retrieveFromApi("projects/list").then(apiResponse => {
-      this.setState({
-        totalDataboards: this.state.totalDataboards + apiResponse.total,
-        projects: apiResponse.data
+    // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    if (this.fetchsLaunched === false) {
+      const promises = [];
+      const promiseProjectList = this.retrieveFromApi("projects/list");
+      const promiseCalendar = this.retrieveFromApi("calendar");
+      promises.push(promiseCalendar);
+      promises.push(promiseProjectList);
+      Promise.all(promises).then(([calendarJson, projectListJson]) => {
+        if (typeof calendarJson !== "undefined") {
+          console.log('guardo');
+          this.setState({
+            caledarResponseApi: calendarJson
+          })
+        } else {
+          console.log('no guarda');
+        }
+        if (typeof projectListJson !== "undefined") {
+          this.setState({
+            totalDataboards: this.state.totalDataboards + projectListJson.total,
+            projects: projectListJson.data
+          });
+        }
       });
-    });
+      this.fetchsLaunched = true;
+    }
   }
 
   updateState(object) {
@@ -121,6 +141,7 @@ class App extends Component {
 
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
+          caledarResponseApi={this.state.caledarResponseApi}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
@@ -153,6 +174,7 @@ class App extends Component {
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
+          caledarResponseApi={this.state.caledarResponseApi}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />

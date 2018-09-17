@@ -34,9 +34,9 @@ class App extends Component {
     this.updateState = this.updateState.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.effect= setInterval(this.showNextDashboard, 3000);
-  // }
+  componentDidMount() {
+    this.effect= setInterval(this.showNextDashboard, 15000);
+  }
 
   updateState(object) {
     this.setState(object);
@@ -83,7 +83,7 @@ class App extends Component {
         currentTransition: "none"
       });
 
-      this.effect= setInterval(this.showNextDashboard, 3000);
+      this.effect= setInterval(this.showNextDashboard, 15000);
 
     } else {
       this.setState({

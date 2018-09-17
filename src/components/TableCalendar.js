@@ -30,16 +30,23 @@ componentDidUpdate() {
       this.animate(notificationEvents);
     }
   });
+  const withDeadline =  this.calendarContainer.current.querySelectorAll('.day__container');
+  withDeadline.forEach(withDeadline => {
+    const notificationDeadline = withDeadline.querySelectorAll('.day__notifications-deadline');
+    if(notificationDeadline.length > 1) {
+      this.animate(notificationDeadline);
+  }
+});
 }
 animate(elements) {
   const visibleTime = 2500;
-  const stupidDelay = 500;
+  const delay = 500;
   const animationTotalTime = (elements.length * visibleTime);
   setInterval(() => {
     let fadeInStart = 0;
     let fadeOutStart = visibleTime;
     elements.forEach((element, index) => {
-      fadeInStart = (visibleTime * (index)) + stupidDelay;
+      fadeInStart = (visibleTime * (index)) + delay;
       fadeOutStart = fadeOutStart * (index + 1);
       this.fadeIn(element, fadeInStart)
       this.fadeOut(element, fadeOutStart);
@@ -68,7 +75,7 @@ fadeOut(element, time) {
       const colorContainer = this.getTodayColor(dateToPrint.dateObject, todayDate);
       let dayContainerClass= 'day__container ' + 'day__container' + colorContainer;
       if (dateToPrint.events.length !== 0) {
-        dayContainerClass = 'day__container--with-event ' + 'day__container' + colorContainer;
+        dayContainerClass = 'day__container ' + 'day__container--with-event ' + 'day__container' + colorContainer;
       }
       datesInHTML.push(
         <div className={dayContainerClass} key={dateToPrint.label}>
@@ -100,7 +107,7 @@ fadeOut(element, time) {
     events.forEach(event => {
       let hiddenClass = "";
       if(counter !== 0) {
-        hiddenClass = "opacity-off display-off";
+        hiddenClass = "opacity-off display-off ";
       }
       eventsInHTML.push(
         <div className={"day__notifications-event " + hiddenClass}>{event}</div>
@@ -112,14 +119,20 @@ fadeOut(element, time) {
 
   makeDeadlinesStructure(deadlines, dateObject, todayDate){
     let deadlinesInHTML= [];
+    let counter = 0;
     deadlines.forEach(deadline => {
+      let hiddenClass = "";
+      if(counter !== 0) {
+        hiddenClass = "opacity-off display-off ";
+      }
       const colorClass= this.getDeadlineColor(deadline.completed, dateObject, todayDate);
       deadlinesInHTML.push(
-        <div className= {"day__notifications-deadline day__notifications-deadline" + colorClass}>
-          <span className= {"deadline__point deadline__point" + colorClass}></span>
+        <div className= {hiddenClass + "day__notifications-deadline " + "day__notifications-deadline" + colorClass}>
+          <span className= {hiddenClass + "deadline__point deadline__point" + colorClass}></span>
           {deadline.text}
         </div>
       );
+      counter++;
     });
     return deadlinesInHTML;
   }

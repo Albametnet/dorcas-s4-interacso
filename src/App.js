@@ -33,17 +33,14 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 15000,
+      refreshTime: 3000,
       notificationsRefreshTime: 30000, //buscar 24 horas en milisegundos
       notifications: [],
-      currentNotifications: 0,
-      rotateNotifications: 1500
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
     this.loadNotifications = this.loadNotifications.bind(this);
-    this.animateNotifications = this.animateNotifications.bind(this);
   }
 
   componentDidMount() {
@@ -113,24 +110,11 @@ class App extends Component {
       });
     });
     this.setState({
-      notifications: doneNotifications,
-      currentNotifications: 1
+      notifications: doneNotifications
     });
     });
   }
 
-  animateNotifications() {
-    let totalNotifications = this.state.notifications.length;
-    if (this.state.currentNotifications >= (totalNotifications - 1)) {
-      this.setState({
-        currentNotifications: 0
-      })
-    } else {
-      this.setState({
-        currentNotifications: this.state.currentNotifications + 1
-      });
-    }
-  }
 
   showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {

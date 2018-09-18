@@ -5,10 +5,10 @@
   justify-content: space-around;
 }
 .main__container--team {
-  flex-grow: 1;
+  flex-flow: 1;
   display: grid;
   grid-template-columns: 0.28fr 0.28fr 0.22fr 0.22fr;
-  grid-auto-rows: 50px;
+  grid-auto-rows: 45px;
   grid-gap: 20px;
   background-color: $pagesBackground;
 }

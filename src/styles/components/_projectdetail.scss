@@ -28,7 +28,11 @@
 }
 .statistics__charts {
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
+  grid-template-columns: 1.30fr 0.70fr;
+  height: 588px;
+}
+.sizing__container {
+  height: 588px;
 }
 .top-contributors__chart{
   margin: 31px;
@@ -36,7 +40,6 @@
 .chart__project--completed-tasks {
   height: 588px;
   background-color: $chartTasks;
-  margin-right: 25px;
 }
 .chart__project--top-contributors {
   height: 588px;
@@ -83,6 +86,6 @@
 .top-contributors__list--name{
   margin-left: 15px;
 }
-.detailed-projects__content{
+.detailedprojects__content{
   flex-grow: 1;
 }

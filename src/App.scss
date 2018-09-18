@@ -17,9 +17,8 @@ body {
   padding-right: 75px;
   background-color: $pagesBackground;
   font-family: $montserrat; 
-  height: 100%;
+  min-height: 100vh;
   display: flex;
-  position: relative;
   left: 0;
 }
 .App {

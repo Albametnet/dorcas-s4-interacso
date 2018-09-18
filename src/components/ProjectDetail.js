@@ -113,7 +113,7 @@ class ProjectDetail extends React.Component {
             projectTasks={this.state.projectData.tasks}
           />
           <div className="statistics__charts">
-            <div>
+            <div className= "sizing__container">
               <ProjectBurndownChart data={this.state.projectTasks} />
               <LegendProjectDetail
                 totalCompleted={this.state.totalCompleted}

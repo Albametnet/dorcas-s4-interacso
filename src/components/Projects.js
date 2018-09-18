@@ -61,6 +61,7 @@ class Projects extends React.Component {
           </div>
         </div>
         <Notifications
+          currentNotificationsTransition={this.props.currentNotificationsTransition}
           notifications={this.props.notifications}
           currentNotifications={this.props.currentNotifications}
          />

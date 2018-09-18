@@ -34,7 +34,7 @@ class App extends Component {
       projectTasks: {},
       projects: [],
       refreshTime: 30000000,
-      notificationsRefreshTime: 3000, //buscar 24 horas en milisegundos
+      notificationsRefreshTime: 30000, //buscar 24 horas en milisegundos
       notifications: [],
       currentNotifications: 0,
       rotateNotifications: 1500
@@ -47,6 +47,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+    this.loadNotifications();
     // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
     setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
     setInterval(this.animateNotifications, this.state.rotateNotifications);

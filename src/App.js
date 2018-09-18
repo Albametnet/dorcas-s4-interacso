@@ -33,7 +33,7 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 30000000,
+      refreshTime: 15000,
       notificationsRefreshTime: 30000, //buscar 24 horas en milisegundos
       notifications: [],
       currentNotifications: 0,
@@ -48,7 +48,7 @@ class App extends Component {
 
   componentDidMount() {
     this.loadNotifications();
-    // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
     setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
     setInterval(this.animateNotifications, this.state.rotateNotifications);
     this.retrieveFromApi("projects/list").then(apiResponse => {
@@ -165,6 +165,12 @@ class App extends Component {
     return (
       <div className="visor" style={sliderStyles}>
 
+      <Calendar datesToPrint={this.state.datesToPrint}
+        calendarLoaded={this.state.calendarLoaded}
+        updateState={this.updateState}
+        retrieveFromApi={this.retrieveFromApi}
+      />
+
       <Projects projectsdata={this.state.projectsdata}
         projectsCharts={this.state.projectsCharts}
         hoursCharts={this.state.hoursCharts}
@@ -173,11 +179,6 @@ class App extends Component {
         notifications={this.state.notifications}
         currentNotifications={this.state.currentNotifications}
       />
-        <Calendar datesToPrint={this.state.datesToPrint}
-          calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
 
         {this.state.projects.map((project) =>
           <ProjectDetail projectHours={this.state.projectHours}

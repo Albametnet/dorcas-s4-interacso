@@ -127,7 +127,7 @@ class ProjectDetail extends React.Component {
           </div>
           <Notifications
             notifications={this.props.notifications}
-            currentNotifications={this.state.currentNotifications}
+            currentNotifications={this.props.currentNotifications}
           />
         </div>
       </div>

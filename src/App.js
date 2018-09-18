@@ -93,7 +93,7 @@ class App extends Component {
   }
 
   loadNotifications() {
-    const filterTime = 1800000;
+    const filterTime = 1800000000;
     this.retrieveFromApi('notifications').then(apiResponse => {
       const orderedNotifications = apiResponse.data.sort((c1, c2) =>
       moment(c1.created_at) < (c2.created_at)

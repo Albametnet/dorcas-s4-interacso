@@ -14,65 +14,6 @@ class Team extends React.Component {
     }
   }
 
-componentDidMount() {
-    this.props.retrieveFromApi("team").then(apiResponse => {
-      this.getAverage(apiResponse);
-      this.getTasksWinner(apiResponse);
-      this.getCommitsWinner(apiResponse);
-    });
-  }
-
-  getAverage(json) {
-    let teamData= [];
-    let memberPicsData= [];
-    let averageCommits= 0;
-    let averageTask= 0;
-    json.data.forEach(person => {
-      averageCommits= averageCommits + person.commits
-      averageTask= averageTask + person.tasks
-      teamData.push({
-        member: person.nombre,
-        tasks: person.tasks,
-        commits: person.commits
-      });
-      memberPicsData.push(person.photo);
-    });
-      this.props.updateState({
-      weekChartData: teamData,
-      memberPics: memberPicsData,
-      averageTask: averageTask/json.data.length,
-      averageCommits: averageCommits/json.data.length
-    })
-  }
-
-  getTasksWinner(json) {
-    let maxTasks= 0;
-    let winnerTasksObj= {};
-    for (let i = 0; i < json.data.length; i++) {
-      if (json.data[i].tasks > maxTasks) {
-        maxTasks= json.data[i].tasks;
-        winnerTasksObj= json.data[i];
-      }
-    }
-    this.props.updateState({
-      tasksWinner: winnerTasksObj,
-    });
-  }
-
-  getCommitsWinner(json) {
-    let maxCommits= 0;
-    let winnerCommitsObj= {};
-    json.data.map(peopleData => {
-      if (peopleData.commits > maxCommits) {
-        maxCommits= peopleData.commits;
-        winnerCommitsObj= peopleData;
-      }
-    });
-    this.props.updateState({
-      commitsWinner: winnerCommitsObj,
-    });
-  }
-
   render() {
     return (
       <div className= "team__container databoard">

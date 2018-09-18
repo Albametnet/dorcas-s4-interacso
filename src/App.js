@@ -20,6 +20,7 @@ class App extends Component {
       datesToPrint: [],
       caledarResponseApi: [],
       projectsResponseApi: [],
+      teamResponseApi: [],
       calendarLoaded: false,
       projectsdata: [],
       projectsCharts: [],
@@ -62,32 +63,12 @@ class App extends Component {
     this.retrieveFromApi("projects").then(projectsResponseApi => {
       this.saveCommitsAndHours(projectsResponseApi);
     });
-  }
-
-  saveCommitsAndHours(projectsResponseApi) {
-    const projectsData= [];
-    for (var elemento in projectsResponseApi.data[0].commitRank) {
-      projectsData.push({
-        projectName: elemento,
-        commits: projectsResponseApi.data[0].commitRank[elemento]
-      });
-    }
-    this.updateState({
-      projectsCharts: projectsData
-    });
-    const hoursData= [];
-    for (var hoursProject in projectsResponseApi.data[0].hourRank) {
-      hoursData.push({
-        hoursName: hoursProject,
-        time: projectsResponseApi.data[0].hourRank[hoursProject]
-      });
-    }
-    this.updateState({
-      hoursCharts: hoursData
+    this.retrieveFromApi("team").then(teamResponseApi => {
+      this.getAverage(teamResponseApi);
+      this.getTasksWinner(teamResponseApi);
+      this.getCommitsWinner(teamResponseApi);
     });
   }
-
-
 
   updateState(object) {
     this.setState(object);
@@ -125,7 +106,6 @@ class App extends Component {
     }
   }
 
-
   showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {
       clearInterval(this.effect);
@@ -135,9 +115,7 @@ class App extends Component {
         currentTransition: "none"
       });
 
-
       this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
-
 
     } else {
       this.setState({
@@ -151,6 +129,84 @@ class App extends Component {
     }
   }
 
+//PROJECTS
+
+  saveCommitsAndHours(projectsResponseApi) {
+    const projectsData= [];
+    for (var elemento in projectsResponseApi.data[0].commitRank) {
+      projectsData.push({
+        projectName: elemento,
+        commits: projectsResponseApi.data[0].commitRank[elemento]
+      });
+    }
+    this.updateState({
+      projectsCharts: projectsData
+    });
+    const hoursData= [];
+    for (var hoursProject in projectsResponseApi.data[0].hourRank) {
+      hoursData.push({
+        hoursName: hoursProject,
+        time: projectsResponseApi.data[0].hourRank[hoursProject]
+      });
+    }
+    this.updateState({
+      hoursCharts: hoursData
+    });
+  }
+
+//TEAM
+
+  getAverage(json) {
+    let teamData= [];
+    let memberPicsData= [];
+    let averageCommits= 0;
+    let averageTask= 0;
+    json.data.forEach(person => {
+      averageCommits= averageCommits + person.commits
+      averageTask= averageTask + person.tasks
+      teamData.push({
+        member: person.nombre,
+        tasks: person.tasks,
+        commits: person.commits
+      });
+      memberPicsData.push(person.photo);
+    });
+      this.updateState({
+      weekChartData: teamData,
+      memberPics: memberPicsData,
+      averageTask: averageTask/json.data.length,
+      averageCommits: averageCommits/json.data.length
+    })
+  }
+
+  getTasksWinner(json) {
+    let maxTasks= 0;
+    let winnerTasksObj= {};
+    for (let i = 0; i < json.data.length; i++) {
+      if (json.data[i].tasks > maxTasks) {
+        maxTasks= json.data[i].tasks;
+        winnerTasksObj= json.data[i];
+      }
+    }
+    this.updateState({
+      tasksWinner: winnerTasksObj,
+    });
+  }
+
+  getCommitsWinner(json) {
+    let maxCommits= 0;
+    let winnerCommitsObj= {};
+    json.data.map(peopleData => {
+      if (peopleData.commits > maxCommits) {
+        maxCommits= peopleData.commits;
+        winnerCommitsObj= peopleData;
+      }
+    });
+    this.updateState({
+      commitsWinner: winnerCommitsObj,
+    });
+  }
+
   render() {
     const sliderStyles = {
       left: this.state.currentSlideLeft,
@@ -158,6 +214,18 @@ class App extends Component {
     }
     return (
       <div className="visor" style={sliderStyles}>
+
+        <Team 
+          teamResponseApi={this.state.teamResponseApi}
+          weekChartData={this.state.weekChartData}
+          memberPics={this.state.memberPics}
+          tasksWinner={this.state.tasksWinner}
+          commitsWinner={this.state.commitsWinner}
+          averageTask={this.state.averageTask}
+          averageCommits={this.state.averageCommits}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+        />
 
         <Calendar
           identifier="1"
@@ -186,15 +254,7 @@ class App extends Component {
           />
         )}
 
-        <Team weekChartData={this.state.weekChartData}
-          memberPics={this.state.memberPics}
-          tasksWinner={this.state.tasksWinner}
-          commitsWinner={this.state.commitsWinner}
-          averageTask={this.state.averageTask}
-          averageCommits={this.state.averageCommits}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
+
         <Calendar
           identifier="2"
           datesToPrint={this.state.datesToPrint}

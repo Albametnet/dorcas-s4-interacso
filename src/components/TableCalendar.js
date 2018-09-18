@@ -4,6 +4,7 @@ class TableCalendar extends React.Component {
   constructor(props){
     super(props);
     this.milisecondsInADay= 86400000;
+    this.calendarContainer = React.createRef();
     if (
       typeof this.props.datesToPrint !== 'undefined' &&
       this.props.datesToPrint.length === 0
@@ -21,26 +22,76 @@ class TableCalendar extends React.Component {
       }
     });
   }
+componentDidUpdate() {
+  const withEvents =  this.calendarContainer.current.querySelectorAll('.day__container--with-event');
+  withEvents.forEach(withEvent => {
+    const notificationEvents = withEvent.querySelectorAll('.day__notifications-event');
+    if(notificationEvents.length > 1) {
+      this.animate(notificationEvents);
+    }
+  });
+  const withDeadline =  this.calendarContainer.current.querySelectorAll('.day__container');
+  withDeadline.forEach(withDeadline => {
+    const notificationDeadline = withDeadline.querySelectorAll('.day__notifications-deadline');
+    if(notificationDeadline.length > 1) {
+      this.animate(notificationDeadline);
+  }
+});
+}
+animate(elements) {
+  const visibleTime = 2500;
+  const delay = 500;
+  const animationTotalTime = (elements.length * visibleTime);
+  setInterval(() => {
+    let fadeInStart = 0;
+    let fadeOutStart = visibleTime;
+    elements.forEach((element, index) => {
+      fadeInStart = (visibleTime * (index)) + delay;
+      fadeOutStart = fadeOutStart * (index + 1);
+      this.fadeIn(element, fadeInStart)
+      this.fadeOut(element, fadeOutStart);
+    });
+  }, animationTotalTime);
+}
+fadeIn(element, time) {
+  setTimeout(()=>{
+    element.classList.remove('display-off');
+    element.classList.remove('opacity-off');
+  }, time);
+}
+fadeOut(element, time) {
+  setTimeout(() => {
+    element.classList.add('opacity-off');
+    setTimeout(() => {
+      element.classList.add('display-off');
+    }, 500);
+  }, time);
+}
 
   makeCalendarStructure() {
     let datesInHTML= [];
     const todayDate= new Date();
     this.props.datesToPrint.forEach(dateToPrint => {
-      let dayContainerClass= 'day__container ';
+      const colorContainer = this.getTodayColor(dateToPrint.dateObject, todayDate);
+      let dayContainerClass= 'day__container ' + 'day__container' + colorContainer;
       if (dateToPrint.events.length !== 0) {
-        dayContainerClass += 'day__container--with-event';
+        dayContainerClass = 'day__container ' + 'day__container--with-event ' + 'day__container' + colorContainer;
       }
       datesInHTML.push(
-        <div className= {dayContainerClass} key={dateToPrint.label}>
-          <div className= "day__label">{dateToPrint.label}</div>
+        <div className={dayContainerClass} key={dateToPrint.label}>
+          <div className= {"day__label " + "day__label" + colorContainer}>{dateToPrint.label}</div>
           <div className= "day__notifications">
-            {this.makeEventsStructure(dateToPrint.events)}
-            {this.makeDeadlinesStructure(dateToPrint.deadlines, dateToPrint.dateObject, todayDate)}
+            <div className= "notifications__container--events">
+              {this.makeEventsStructure(dateToPrint.events)}
+            </div>
+            <div className= "notifications__container--deadlines">
+              {this.makeDeadlinesStructure(dateToPrint.deadlines, dateToPrint.dateObject, todayDate)}
+            </div>
           </div>
         </div>
       )
     })
-    return <div className= "calendar__container">
+    return <div className= "calendar__container" ref={this.calendarContainer}>
       <div className= "calendar__weekday">Lunes</div>
       <div className= "calendar__weekday">Martes</div>
       <div className= "calendar__weekday">Miércoles</div>
@@ -52,24 +103,36 @@ class TableCalendar extends React.Component {
 
   makeEventsStructure(events) {
     let eventsInHTML= [];
+    let counter = 0;
     events.forEach(event => {
+      let hiddenClass = "";
+      if(counter !== 0) {
+        hiddenClass = "opacity-off display-off ";
+      }
       eventsInHTML.push(
-        <div className= "day__notifications-event">{event}</div>
+        <div className={"day__notifications-event " + hiddenClass}>{event}</div>
       );
+      counter++;
     });
     return eventsInHTML;
   }
 
   makeDeadlinesStructure(deadlines, dateObject, todayDate){
     let deadlinesInHTML= [];
+    let counter = 0;
     deadlines.forEach(deadline => {
+      let hiddenClass = "";
+      if(counter !== 0) {
+        hiddenClass = "opacity-off display-off ";
+      }
       const colorClass= this.getDeadlineColor(deadline.completed, dateObject, todayDate);
       deadlinesInHTML.push(
-        <div className= {"day__notifications-deadline day__notifications-deadline" + colorClass}>
-          <span className= {"deadline__point deadline__point" + colorClass}></span>
+        <div className= {hiddenClass + "day__notifications-deadline " + "day__notifications-deadline" + colorClass}>
+          <span className= {hiddenClass + "deadline__point deadline__point" + colorClass}></span>
           {deadline.text}
         </div>
       );
+      counter++;
     });
     return deadlinesInHTML;
   }
@@ -89,6 +152,13 @@ class TableCalendar extends React.Component {
       }
     }
 
+  }
+  getTodayColor(dateObject, todayDate) {
+    if(this.formatDate(dateObject) === this.formatDate(todayDate)) {
+      return "--today ";
+    }else {
+      return " ";
+    }
   }
 
   nextWeekAndRestOfThisWeek(todayDate){

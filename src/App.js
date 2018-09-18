@@ -9,14 +9,14 @@ import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.apiService= 'https://databoards-api.interacso.com/';
-    this.state= {
+    this.apiService = 'https://databoards-api.interacso.com/';
+    this.state = {
       currentDataboard: 0,
       currentTransition: "0.5s",
       currentSlideLeft: "0",
-      totalDataboards: 5,
+      totalDataboards: 4,
       datesToPrint: [],
       calendarLoaded: false,
       projectsdata: [],
@@ -27,23 +27,34 @@ class App extends Component {
       tasksWinner: {},
       commitsWinner: {},
       averageTask: 0,
-      averageCommits: 0
+      averageCommits: 0,
+      projectHours: {},
+      projectCommits: 0,
+      projectTasks: {},
+      projects: [],
+      refreshTime: 3000
     }
-    this.showNextDashboard= this.showNextDashboard.bind(this);
+    this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
   }
 
-  // componentDidMount() {
-  //   this.effect= setInterval(this.showNextDashboard, 3000);
-  // }
+  componentDidMount() {
+    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime)
+    this.retrieveFromApi("projects/list").then(apiResponse => {
+      this.setState({
+        totalDataboards: this.state.totalDataboards + apiResponse.total,
+        projects: apiResponse.data
+      });
+    });
+  }
 
   updateState(object) {
     this.setState(object);
   }
 
   retrieveFromApi(endpoint) {
-    if(typeof Env !== "undefined" & Env.token !== "undefined") {
+    if (typeof Env !== "undefined" & Env.token !== "undefined") {
       return fetch(
         this.apiService + endpoint,
         {
@@ -56,7 +67,7 @@ class App extends Component {
           }
         }
       ).then(response => {
-        if(response.status === 401){
+        if (response.status === 401) {
           throw Error(response.statusText);
         } else {
           return response.json();
@@ -74,7 +85,8 @@ class App extends Component {
     }
   }
 
-  showNextDashboard(){
+
+  showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {
       clearInterval(this.effect);
       this.setState({
@@ -83,13 +95,15 @@ class App extends Component {
         currentTransition: "none"
       });
 
-      this.effect= setInterval(this.showNextDashboard, 3000);
+
+      this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+
 
     } else {
       this.setState({
         currentDataboard: this.state.currentDataboard + 1,
       });
-      const newSlide= this.state.currentDataboard * -100;
+      const newSlide = this.state.currentDataboard * -100;
       this.setState({
         currentSlideLeft: `${newSlide}%`,
         currentTransition: "0.5s"
@@ -98,36 +112,59 @@ class App extends Component {
   }
 
   render() {
-    const sliderStyles= {
+    const sliderStyles = {
       left: this.state.currentSlideLeft,
       transition: this.state.currentTransition
     }
     return (
+<<<<<<< HEAD
       <div className= "visor" style={sliderStyles}>
         {/* <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
          /> */}
         <Projects projectsdata= {this.state.projectsdata}
+=======
+      <div className="visor" style={sliderStyles}>
+
+        <Calendar datesToPrint={this.state.datesToPrint}
+          calendarLoaded={this.state.calendarLoaded}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+        />
+        <Projects projectsdata={this.state.projectsdata}
+>>>>>>> Dev
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
-        <ProjectDetail />
+
+        {this.state.projects.map((project) =>
+          <ProjectDetail projectHours={this.state.projectHours}
+            projectCommits={this.state.projectCommits}
+            projectTasks={this.state.projectTasks}
+            updateState={this.updateState}
+            retrieveFromApi={this.retrieveFromApi}
+            projectId={project.gid}
+            projectName={project.name}
+          />
+        )}
+
         <Team weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
           tasksWinner={this.state.tasksWinner}
           commitsWinner={this.state.commitsWinner}
           averageTask={this.state.averageTask}
           averageCommits={this.state.averageCommits}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
-         />
+        />
       </div>
     );
   }

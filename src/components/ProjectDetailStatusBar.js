@@ -1,11 +1,6 @@
 import React from "react";
 
 class ProjectDetailBar extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
-
   render() {
     const hours= (this.props.projectHours)
     const commits= (this.props.projectCommits)
@@ -13,8 +8,8 @@ class ProjectDetailBar extends React.Component {
     const percentage = Math.round(
       this.props.projectTasks.completed / this.props.projectTasks.total*100
     )
-    let total = tasks.total;
-    if (total == 0) {
+    let total = parseInt(tasks.total, 10);
+    if (total === 0) {
       total = 1;
     }
     return (

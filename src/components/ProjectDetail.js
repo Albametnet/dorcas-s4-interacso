@@ -29,22 +29,22 @@ class ProjectDetail extends React.Component {
 
   componentDidMount() {
     this.props
-      .retrieveFromApi(`projects/${this.props.projectId}`)
-      .then(apiResponse => {
-        this.setState({
-          projectData: apiResponse
-        });
+    .retrieveFromApi(`projects/${this.props.projectId}`)
+    .then(apiResponse => {
+      this.setState({
+        projectData: apiResponse
       });
+    });
     this.props
-      .retrieveFromApi(`projects/${this.props.projectId}/tasks`)
-      .then(apiResponse => {
-        if (apiResponse.data != undefined) {
-          const generatedData = this.generateChartData(apiResponse.data);
-          this.setState({
-            projectTasks: generatedData
-          });
-        }
-      });
+    .retrieveFromApi(`projects/${this.props.projectId}/tasks`)
+    .then(apiResponse => {
+      if (apiResponse.data !== undefined) {
+        const generatedData = this.generateChartData(apiResponse.data);
+        this.setState({
+          projectTasks: generatedData
+        });
+      }
+    });
   }
 
   generateChartData(tasks) {
@@ -56,13 +56,12 @@ class ProjectDetail extends React.Component {
         created: 0,
         completed: 0,
         weekFirst: moment(currentYear)
-          .add(week - 1, "weeks")
-          .format("MMM D")
+        .add(week - 1, "weeks")
+        .format("MMM D")
       };
     }
 
     tasks.forEach(task => {
-      const taskYear = moment(task.created_at).year();
       const weekOfYear = moment(task.created_at).isoWeek();
       totals[weekOfYear].created = totals[weekOfYear].created + 1;
       if (task.completed) {

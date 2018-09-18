@@ -9,7 +9,7 @@ class Notifications extends React.Component {
         <div className= "footer__notif-details">
           <div className= "detail__notif--category">
             <div className= "footer__bell">
-              <img src= {bell} className= "bell" />
+              <img src= {bell} className= "bell" alt="bell"/>
             </div>
             <p className= "detail__notif--type">Nueva tarea</p>
           </div>

@@ -12,13 +12,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.apiService = 'https://databoards-api.interacso.com/';
+    this.milisecondsInADay= 86400000;
     this.state = {
       currentDataboard: 0,
       currentTransition: "0.5s",
       currentSlideLeft: "0",
       totalDataboards: 4,
       datesToPrint: [],
-      caledarResponseApi: [],
+      calendarResponseApi: [],
       projectsResponseApi: [],
       teamResponseApi: [],
       calendarLoaded: false,
@@ -35,11 +36,18 @@ class App extends Component {
       projectCommits: 0,
       projectTasks: {},
       projects: [],
-      refreshTime: 8000
+      refreshTime: 15000
+    }
+    if (
+      typeof this.state.datesToPrint !== 'undefined' &&
+      this.state.datesToPrint.length === 0
+    ) {
+      this.getCalendarDates(this.state.datesToPrint);
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
+    this.formatDate = this.formatDate.bind(this);
   }
 
   componentDidMount() {
@@ -54,10 +62,7 @@ class App extends Component {
     });
     this.retrieveFromApi("calendar").then(calendarJson => {
       if (typeof calendarJson !== "undefined") {
-        console.log('guardo');
-        this.setState({
-          caledarResponseApi: calendarJson
-        })
+        this.setDatesNotifications(calendarJson);
       }
     });
     this.retrieveFromApi("projects").then(projectsResponseApi => {
@@ -97,42 +102,111 @@ class App extends Component {
           return response.json();
         }
       }
-      ).then(json => {
-        return json;
-      }).catch(error => {
-        alert("El token es incorrecto");
-        console.error(error);
-      });
-    } else {
-      alert("No está usted autorizado");
-      return null;
-    }
+    ).then(json => {
+      return json;
+    }).catch(error => {
+      alert("El token es incorrecto");
+      console.error(error);
+    });
+  } else {
+    alert("No está usted autorizado");
+    return null;
   }
+}
 
-  showNextDashboard() {
-    if (this.state.currentDataboard == this.state.totalDataboards - 1) {
-      clearInterval(this.effect);
-      this.setState({
-        currentDataboard: 0,
-        currentSlideLeft: "0",
-        currentTransition: "none"
-      });
+showNextDashboard() {
+  if (this.state.currentDataboard === this.state.totalDataboards - 1) {
+    clearInterval(this.effect);
+    this.setState({
+      currentDataboard: 0,
+      currentSlideLeft: "0",
+      currentTransition: "none"
+    });
 
-      this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
 
-    } else {
-      this.setState({
-        currentDataboard: this.state.currentDataboard + 1,
-      });
-      const newSlide = this.state.currentDataboard * -100;
-      this.setState({
-        currentSlideLeft: `${newSlide}%`,
-        currentTransition: "0.5s"
+  } else {
+    this.setState({
+      currentDataboard: this.state.currentDataboard + 1,
+    });
+    const newSlide = this.state.currentDataboard * -100;
+    this.setState({
+      currentSlideLeft: `${newSlide}%`,
+      currentTransition: "0.5s"
+    })
+  }
+}
+//calendar
+getCalendarDates(datesToPrint) {
+  let calendarDate= this.calculateStartDate();
+  let weekDays= 0;
+  for (let i = 0; i < 20; i++) {
+    datesToPrint.push(
+      {
+        date: this.formatDate(calendarDate),
+        dateObject: calendarDate,
+        label: calendarDate.getDate(),
+        events: [],
+        deadlines: []
       })
+      calendarDate= this.incrementDaysInMiliseconds(calendarDate, 1);
+      if (weekDays === 4){
+        calendarDate= this.incrementDaysInMiliseconds(calendarDate, 2);
+        weekDays= 0;
+      } else {
+        weekDays++;
+      }
     }
+    this.setState({
+      datesToPrint: datesToPrint
+    });
   }
 
-//PROJECTS
+  formatDate(date) {
+    const month= ('0' + (date.getMonth() + 1)).slice(-2);
+    const day= ('0' + date.getDate()).slice(-2);
+    return date.getFullYear() + '-' + month + '-' + day;
+  }
+
+  setDatesNotifications(json) {
+    const datesToPrint = this.state.datesToPrint;
+    const apiResponse = json.data;
+    datesToPrint.forEach((dateToPrint, index) => {
+      apiResponse.forEach(dayFromApi => {
+        if (dayFromApi.datecalendar === dateToPrint.date) {
+          if (dayFromApi.datetype === 'event') {
+            dateToPrint.events.push(dayFromApi.text);
+          }
+          if (dayFromApi.datetype === 'deadline') {
+            dateToPrint.deadlines.push({
+              "text": dayFromApi.text,
+              "completed": dayFromApi.completed
+            });
+          }
+        }
+      });
+      datesToPrint[index]= dateToPrint;
+    });
+    this.setState ({
+      datesToPrint: datesToPrint
+    });
+  }
+
+  incrementDaysInMiliseconds(date, numDays) {
+    const totalMiliseconds= this.milisecondsInADay * numDays;
+    return new Date(date.getTime() + totalMiliseconds);
+  }
+
+  calculateStartDate() {
+    const today= new Date();
+    const mondayPastWeek= (today.getDay() - 1) + 7;
+    const mondayPastWeekMiliseconds= this.milisecondsInADay * mondayPastWeek;
+    const miliseconds= today.getTime() - mondayPastWeekMiliseconds;
+    const startDate= new Date(miliseconds);
+    return startDate;
+  }
+
+  //PROJECTS
 
   saveCommitsAndHours(projectsResponseApi) {
     const projectsData= [];
@@ -157,7 +231,7 @@ class App extends Component {
     });
   }
 
-//TEAM
+  //TEAM
 
   getAverage(json) {
     let teamData= [];
@@ -174,7 +248,7 @@ class App extends Component {
       });
       memberPicsData.push(person.photo);
     });
-      this.updateState({
+    this.updateState({
       weekChartData: teamData,
       memberPics: memberPicsData,
       averageTask: averageTask/json.data.length,
@@ -199,13 +273,13 @@ class App extends Component {
   getCommitsWinner(json) {
     let maxCommits= 0;
     let winnerCommitsObj= {};
-    json.data.map(peopleData => {
+    json.data.forEach(peopleData => {
       if (peopleData.commits > maxCommits) {
         maxCommits= peopleData.commits;
         winnerCommitsObj= peopleData;
       }
     });
-    this.updateState({
+    this.setState({
       commitsWinner: winnerCommitsObj,
     });
   }
@@ -219,14 +293,15 @@ class App extends Component {
       <div className="visor" style={sliderStyles}>
 
         <Calendar
-          identifier="1"
+          milisecondsInADay={this.milisecondsInADay}
           datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          caledarResponseApi={this.state.caledarResponseApi}
+          calendarResponseApi={this.state.calendarResponseApi}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
+          formatDate={this.formatDate}
         />
-        
+
         <Projects projectsdata={this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
@@ -235,8 +310,10 @@ class App extends Component {
           retrieveFromApi={this.retrieveFromApi}
         />
 
-        {this.state.projects.map((project) =>
-          <ProjectDetail projectHours={this.state.projectHours}
+        {this.state.projects.map((project, index) =>
+          <ProjectDetail
+            key={"projectDetail_" + index}
+            projectHours={this.state.projectHours}
             projectCommits={this.state.projectCommits}
             projectTasks={this.state.projectTasks}
             updateState={this.updateState}
@@ -246,7 +323,7 @@ class App extends Component {
           />
         )}
 
-        <Team 
+        <Team
           teamResponseApi={this.state.teamResponseApi}
           weekChartData={this.state.weekChartData}
           memberPics={this.state.memberPics}
@@ -259,12 +336,13 @@ class App extends Component {
         />
 
         <Calendar
-          identifier="2"
+          milisecondsInADay={this.milisecondsInADay}
           datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
-          caledarResponseApi={this.state.caledarResponseApi}
+          calendarResponseApi={this.state.calendarResponseApi}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
+          formatDate={this.formatDate}
         />
       </div>
     );

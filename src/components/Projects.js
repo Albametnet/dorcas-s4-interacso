@@ -20,7 +20,7 @@ class Projects extends React.Component {
         <ProjectListStatusBar projectsdata= {this.props.projectsdata}
           updateState={this.props.updateState}
           retrieveFromApi={this.props.retrieveFromApi}
-         />
+        />
         <div className= "statistics__chart">
           <div className= "chart__details">
             <p>Proyectos más activos (commits)</p>

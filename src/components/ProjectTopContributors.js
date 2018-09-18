@@ -1,10 +1,6 @@
 import React from "react";
 
 class ProjectTopContributors extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const orderContributors = this.props.contributors.sort(function(c1, c2) {
       if (c1.commits < c2.commits){
@@ -22,7 +18,7 @@ class ProjectTopContributors extends React.Component {
           <div className="top-contributors__list">
             <ul className="top-contributors__list">
               {orderContributors.map((contributor, index) =>
-                <li className="top-contributors__list--element">
+                <li className="top-contributors__list--element" key={'contributors_' + index}>
                   <span className="top-contributors__list--number">
                     <span>#{index+1}</span>
                     <span className="top-contributors__list--name">{contributor.name}</span>

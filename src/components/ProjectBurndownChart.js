@@ -48,18 +48,18 @@ class ProjectBurndownChart extends React.Component {
     return (
       <div className= "statistics__charts">
         <div className= "chart__project--completed-tasks">
-        <Chart
-          dataSource= {this.props.data}
-          commonSeriesSettings= {settings}
-          series= {series}
-          size= {size}
-          argumentAxis= {axisSettings}
-          valueAxis= {axisSettings}
-          legend= {legendsSettings}
-        />
+          <Chart
+            dataSource= {this.props.data}
+            commonSeriesSettings= {settings}
+            series= {series}
+            size= {size}
+            argumentAxis= {axisSettings}
+            valueAxis= {axisSettings}
+            legend= {legendsSettings}
+          />
         </div>
       </div>
-      );
+    );
   }
 }
 

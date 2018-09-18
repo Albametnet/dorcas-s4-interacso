@@ -1,10 +1,6 @@
 import React from "react";
 
 class ProjectListStatusBar extends React.Component {
-  constructor(props){
-    super(props);
-  }
-
   render() {
     const projects= this.props.projectsdata;
     return (

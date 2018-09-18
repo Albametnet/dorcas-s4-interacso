@@ -9,7 +9,7 @@ class Notifications extends React.Component {
       <div className= "footer__container">
         <div className= "footer__notif--number">NOTIFICACIONES ({this.props.notifications.length})
         </div>
-          <div className= "footer__notif--container">
+          <div className= "footer__notif--container" style= {{top: `-${this.props.currentNotifications * 70}px`}}>
             {this.props.notifications.map(notification =>
               <div className= "footer__notif-details">
                 <div className= "detail__notif--category">
@@ -21,11 +21,11 @@ class Notifications extends React.Component {
                 <div className= "detail__notif--content">{notification.text}</div>
                 <div className= "detail__notif--time">{notification.from}</div>
               </div>
-          )}
+            )}
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
-}
 
 export default Notifications;

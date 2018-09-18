@@ -34,20 +34,22 @@ class App extends Component {
       projectTasks: {},
       projects: [],
       refreshTime: 30000000,
-      notificationsRefreshTime: 40000, //buscar 24 horas en milisegundos
+      notificationsRefreshTime: 3000, //buscar 24 horas en milisegundos
       notifications: [],
-      currentNotifications: 0
+      currentNotifications: 0,
+      rotateNotifications: 1500
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
     this.updateState = this.updateState.bind(this);
     this.loadNotifications = this.loadNotifications.bind(this);
+    this.animateNotifications = this.animateNotifications.bind(this);
   }
 
   componentDidMount() {
-    //this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
-    this.loadNotifications();
-    this.notificationEffect = setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
+    // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    setInterval(this.loadNotifications, this.state.notificationsRefreshTime);
+    setInterval(this.animateNotifications, this.state.rotateNotifications);
     this.retrieveFromApi("projects/list").then(apiResponse => {
       this.setState({
         totalDataboards: this.state.totalDataboards + apiResponse.total,
@@ -93,7 +95,7 @@ class App extends Component {
   }
 
   loadNotifications() {
-    const filterTime = 1800000000;
+    const filterTime = 1800000000000000;
     this.retrieveFromApi('notifications').then(apiResponse => {
       const orderedNotifications = apiResponse.data.sort((c1, c2) =>
       moment(c1.created_at) < (c2.created_at)
@@ -113,8 +115,21 @@ class App extends Component {
       notifications: doneNotifications,
       currentNotifications: 1
     });
-  });
-}
+    });
+  }
+
+  animateNotifications() {
+    let totalNotifications = this.state.notifications.length;
+    if (this.state.currentNotifications >= (totalNotifications - 1)) {
+      this.setState({
+        currentNotifications: 0
+      })
+    } else {
+      this.setState({
+        currentNotifications: this.state.currentNotifications + 1
+      });
+    }
+  }
 
   showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {

@@ -5,10 +5,6 @@
   color: $titles;
   font-family: $montserrat, $sansSe;
   height: 70px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
 }
 .footer__notif-details {
   display: grid;
@@ -42,6 +38,7 @@
   font-size: $normal;
   font-weight: $semibold;
   letter-spacing: 1.8px;
+  flex-grow: 1;
 }
 .detail__notif--time {
   font-size: $small;

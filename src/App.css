@@ -178,7 +178,7 @@
   margin-top: 100px; }
 
 .sizing__box {
-  height: 100%; }
+  flex-grow: 1; }
 
 .project__container {
   height: 100%; }
@@ -190,7 +190,7 @@
   justify-content: space-around; }
 
 .main__container--team {
-  height: auto;
+  flex-grow: 1;
   display: grid;
   grid-template-columns: 0.28fr 0.28fr 0.22fr 0.22fr;
   grid-auto-rows: 50px;
@@ -415,17 +415,16 @@
 .top-contributors__list--name {
   margin-left: 15px; }
 
+.detailed-projects__content {
+  flex-grow: 1; }
+
 .footer__container {
   display: grid;
   grid-template-columns: 0.22fr 0.78fr;
   margin-top: 30px;
   color: #ffffff;
   font-family: "Montserrat", "sans-serif";
-  height: 70px;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0; }
+  height: 70px; }
 
 .footer__notif-details {
   display: grid;
@@ -458,7 +457,8 @@
 .detail__notif--content {
   font-size: 25px;
   font-weight: 600;
-  letter-spacing: 1.8px; }
+  letter-spacing: 1.8px;
+  flex-grow: 1; }
 
 .detail__notif--time {
   font-size: 20px;
@@ -474,8 +474,13 @@ body {
   padding-left: 75px;
   padding-right: 75px;
   background-color: #061135;
-  font-family: "Montserrat"; }
+  font-family: "Montserrat";
+  height: 100%;
+  display: flex;
+  position: relative;
+  left: 0; }
 
 .App {
-  width: 100%;
-  height: 100%; }
+  min-height: 100vh;
+  flex-direction: column;
+  overflow: hidden; }

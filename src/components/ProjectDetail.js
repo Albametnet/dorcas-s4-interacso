@@ -120,13 +120,12 @@ class ProjectDetail extends React.Component {
                 totalPending={this.state.totalPending}
               />
             </div>
-
             <ProjectTopContributors
               contributors={this.state.projectData.contributors}
             />
           </div>
-          <Notifications />
         </div>
+        <Notifications />
       </div>
     );
   }

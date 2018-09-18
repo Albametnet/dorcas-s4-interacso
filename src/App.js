@@ -117,14 +117,6 @@ class App extends Component {
       transition: this.state.currentTransition
     }
     return (
-<<<<<<< HEAD
-      <div className= "visor" style={sliderStyles}>
-        {/* <Calendar datesToPrint={this.state.datesToPrint}
-          calendarLoaded={this.state.calendarLoaded}
-          updateState={this.updateState}           retrieveFromApi={this.retrieveFromApi}
-         /> */}
-        <Projects projectsdata= {this.state.projectsdata}
-=======
       <div className="visor" style={sliderStyles}>
 
         <Calendar datesToPrint={this.state.datesToPrint}
@@ -133,7 +125,6 @@ class App extends Component {
           retrieveFromApi={this.retrieveFromApi}
         />
         <Projects projectsdata={this.state.projectsdata}
->>>>>>> Dev
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
           updateState={this.updateState}

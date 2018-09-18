@@ -36,6 +36,7 @@ class App extends Component {
       refreshTime: 30000000,
       notificationsRefreshTime: 40000, //buscar 24 horas en milisegundos
       notifications: [],
+      currentNotifications: 0
     }
     this.showNextDashboard = this.showNextDashboard.bind(this);
     this.retrieveFromApi = this.retrieveFromApi.bind(this);
@@ -92,26 +93,28 @@ class App extends Component {
   }
 
   loadNotifications() {
+    const filterTime = 1800000;
     this.retrieveFromApi('notifications').then(apiResponse => {
-      this.setState({
-        notifications: apiResponse.data
-      });
-
-    });
-  }
-
-  prepareNotifications(notifications) {
+      const orderedNotifications = apiResponse.data.sort((c1, c2) =>
+      moment(c1.created_at) < (c2.created_at)
+    );
     const doneNotifications = [];
-
-    notifications.forEach((notification) => {
+    orderedNotifications.forEach((notification) => {
+      if (moment().diff(moment(notification.created_at)) > filterTime) {
+        return;
+      }
       doneNotifications.push({
         category: notification.category,
         text: notification.text,
         from: moment(notification.created_at).fromNow(),
       });
     });
-    return doneNotifications;
-  }
+    this.setState({
+      notifications: doneNotifications,
+      currentNotifications: 1
+    });
+  });
+}
 
   showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {
@@ -152,6 +155,7 @@ class App extends Component {
         updateState={this.updateState}
         retrieveFromApi={this.retrieveFromApi}
         notifications={this.state.notifications}
+        currentNotifications={this.state.currentNotifications}
       />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}
@@ -168,6 +172,7 @@ class App extends Component {
             projectId={project.gid}
             projectName={project.name}
             notifications={this.state.notifications}
+            currentNotifications={this.state.currentNotifications}
           />
         )}
 
@@ -180,6 +185,7 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
           notifications={this.state.notifications}
+          currentNotifications={this.state.currentNotifications}
         />
         <Calendar datesToPrint={this.state.datesToPrint}
           calendarLoaded={this.state.calendarLoaded}

@@ -4,16 +4,11 @@ import bell from "../images/bell.svg";
 
 class Notifications extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
-    const readyNotifications = this.prepareNotifications(this.props.notifications);
     return (
       <div className= "footer__container">
-        <div className= "footer__notif--number">NOTIFICACIONES ({readyNotifications.length})</div>
-        {readyNotifications.map(notification =>
+        <div className= "footer__notif--number">NOTIFICACIONES ({this.props.notifications.length})</div>
+        {this.props.notifications.map(notification =>
           <div className= "footer__notif-details">
             <div className= "detail__notif--category">
               <div className= "footer__bell">

@@ -125,7 +125,10 @@ class ProjectDetail extends React.Component {
               contributors={this.state.projectData.contributors}
             />
           </div>
-          <Notifications notifications={this.props.notifications} />
+          <Notifications
+            notifications={this.props.notifications}
+            currentNotifications={this.state.currentNotifications}
+          />
         </div>
       </div>
     );

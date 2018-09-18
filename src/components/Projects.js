@@ -13,35 +13,6 @@ class Projects extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.props.retrieveFromApi("projects").then(apiResponse => {
-      this.saveCommitsAndHours(apiResponse);
-    });
-  }
-
-  saveCommitsAndHours(apiResponse) {
-    const projectsData= [];
-    for (var elemento in apiResponse.data[0].commitRank) {
-      projectsData.push({
-        projectName: elemento,
-        commits: apiResponse.data[0].commitRank[elemento]
-      });
-    }
-    this.props.updateState({
-      projectsCharts: projectsData
-    });
-    const hoursData= [];
-    for (var hoursProject in apiResponse.data[0].hourRank) {
-      hoursData.push({
-        hoursName: hoursProject,
-        time: apiResponse.data[0].hourRank[hoursProject]
-      });
-    }
-    this.props.updateState({
-      hoursCharts: hoursData
-    });
-  }
-
   render() {
     return (
       <div className= "projects__container databoard">

@@ -19,6 +19,7 @@ class App extends Component {
       totalDataboards: 4,
       datesToPrint: [],
       caledarResponseApi: [],
+      projectsResponseApi: [],
       calendarLoaded: false,
       projectsdata: [],
       projectsCharts: [],
@@ -41,7 +42,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
+    this.effect= setInterval(this.showNextDashboard, this.state.refreshTime);
     this.retrieveFromApi("projects/list").then(projectListJson => {
       if (typeof projectListJson !== "undefined") {
         this.setState({
@@ -58,7 +59,35 @@ class App extends Component {
         })
       }
     });
+    this.retrieveFromApi("projects").then(projectsResponseApi => {
+      this.saveCommitsAndHours(projectsResponseApi);
+    });
   }
+
+  saveCommitsAndHours(projectsResponseApi) {
+    const projectsData= [];
+    for (var elemento in projectsResponseApi.data[0].commitRank) {
+      projectsData.push({
+        projectName: elemento,
+        commits: projectsResponseApi.data[0].commitRank[elemento]
+      });
+    }
+    this.updateState({
+      projectsCharts: projectsData
+    });
+    const hoursData= [];
+    for (var hoursProject in projectsResponseApi.data[0].hourRank) {
+      hoursData.push({
+        hoursName: hoursProject,
+        time: projectsResponseApi.data[0].hourRank[hoursProject]
+      });
+    }
+    this.updateState({
+      hoursCharts: hoursData
+    });
+  }
+
+
 
   updateState(object) {
     this.setState(object);
@@ -141,6 +170,7 @@ class App extends Component {
         <Projects projectsdata={this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
+          projectsResponseApi={this.state.projectsResponseApi}
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />

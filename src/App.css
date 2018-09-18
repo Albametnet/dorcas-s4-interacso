@@ -375,7 +375,9 @@
   font-family: "Montserrat", "sans-serif";
   height: 70px;
   position: absolute;
-  bottom: 0; }
+  bottom: 0;
+  left: 0;
+  right: 0; }
 
 .footer__notif-details {
   display: grid;

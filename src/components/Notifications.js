@@ -6,20 +6,6 @@ class Notifications extends React.Component {
 
   constructor(props) {
     super(props);
-    this.prepareNotifications = this.prepareNotifications.bind(this);
-  }
-
-  prepareNotifications(notifications) {
-    const doneNotifications = [];
-
-    notifications.forEach((notification) => {
-      doneNotifications.push({
-        category: notification.category,
-        text: notification.text,
-        from: moment(notification.created_at).fromNow(),
-      });
-    });
-    return doneNotifications;
   }
 
   render() {

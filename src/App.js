@@ -7,6 +7,7 @@ import Env from './data/.env.json';
 import './App.css';
 import 'devextreme/dist/css/dx.common.css';
 import 'devextreme/dist/css/dx.light.compact.css';
+import moment from "moment";
 
 class App extends Component {
   constructor(props) {
@@ -54,14 +55,6 @@ class App extends Component {
     });
   }
 
-  loadNotifications() {
-    this.retrieveFromApi('notifications').then(apiResponse => {
-      this.setState({
-        notifications: apiResponse.data
-      });
-    });
-  }
-
   updateState(object) {
     this.setState(object);
   }
@@ -98,6 +91,27 @@ class App extends Component {
     }
   }
 
+  loadNotifications() {
+    this.retrieveFromApi('notifications').then(apiResponse => {
+      this.setState({
+        notifications: apiResponse.data
+      });
+
+    });
+  }
+
+  prepareNotifications(notifications) {
+    const doneNotifications = [];
+
+    notifications.forEach((notification) => {
+      doneNotifications.push({
+        category: notification.category,
+        text: notification.text,
+        from: moment(notification.created_at).fromNow(),
+      });
+    });
+    return doneNotifications;
+  }
 
   showNextDashboard() {
     if (this.state.currentDataboard == this.state.totalDataboards - 1) {

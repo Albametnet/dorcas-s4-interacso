@@ -63,6 +63,9 @@ class App extends Component {
     this.retrieveFromApi("projects").then(projectsResponseApi => {
       this.saveCommitsAndHours(projectsResponseApi);
     });
+    this.retrieveFromApi("projects").then(projectsResponseApi => {
+      this.updateState({projectsdata: projectsResponseApi.data[0]})
+    });
     this.retrieveFromApi("team").then(teamResponseApi => {
       this.getAverage(teamResponseApi);
       this.getTasksWinner(teamResponseApi);
@@ -215,18 +218,6 @@ class App extends Component {
     return (
       <div className="visor" style={sliderStyles}>
 
-        <Team 
-          teamResponseApi={this.state.teamResponseApi}
-          weekChartData={this.state.weekChartData}
-          memberPics={this.state.memberPics}
-          tasksWinner={this.state.tasksWinner}
-          commitsWinner={this.state.commitsWinner}
-          averageTask={this.state.averageTask}
-          averageCommits={this.state.averageCommits}
-          updateState={this.updateState}
-          retrieveFromApi={this.retrieveFromApi}
-        />
-
         <Calendar
           identifier="1"
           datesToPrint={this.state.datesToPrint}
@@ -235,6 +226,7 @@ class App extends Component {
           updateState={this.updateState}
           retrieveFromApi={this.retrieveFromApi}
         />
+        
         <Projects projectsdata={this.state.projectsdata}
           projectsCharts={this.state.projectsCharts}
           hoursCharts={this.state.hoursCharts}
@@ -254,6 +246,17 @@ class App extends Component {
           />
         )}
 
+        <Team 
+          teamResponseApi={this.state.teamResponseApi}
+          weekChartData={this.state.weekChartData}
+          memberPics={this.state.memberPics}
+          tasksWinner={this.state.tasksWinner}
+          commitsWinner={this.state.commitsWinner}
+          averageTask={this.state.averageTask}
+          averageCommits={this.state.averageCommits}
+          updateState={this.updateState}
+          retrieveFromApi={this.retrieveFromApi}
+        />
 
         <Calendar
           identifier="2"
